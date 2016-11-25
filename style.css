@@ -1,0 +1,23 @@
+body {
+    display: flex;
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+}
+.controls-panel {
+    min-width: 100px;
+    max-width: 100px;
+    flex: 0 1 100px;
+    overflow: auto;
+    background: #F7F7F7;
+    border-right: 1px solid #BBB;
+    padding: 5px;
+}
+.image-preview-thing {
+    /*width: 80%;*/
+    overflow: auto;
+    padding: 5px;
+}
+#preview-img {
+    max-width: 100%;
+}
