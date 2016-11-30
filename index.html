@@ -7,11 +7,18 @@
         <script type="text/javascript" src="page.js"></script>
     </head>
     <body>
-        <div class="controls-panel">
-            <button type="button" name="button" onclick="doThing()">Do thing</button>
+        <div class="sidebar">
+            <ul class="sheets-list"></ul>
+            <div class="sheets-footer">
+                <button class="create-spritesheet" type="button" name="New spritesheet" title="Create a new spritesheet">New</button>
+            </div>
         </div>
         <div class="image-preview-thing">
-            <img alt="Preview image" id="preview-img">
+            <!-- <img alt="Preview image" id="preview-img"> -->
+            <div class="buttons">
+                <button class="test-generate-data">generate some sample data for this</button>
+            </div>
+            <pre id="preview-css"></pre>
         </div>
     </body>
 </html>

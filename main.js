@@ -1,4 +1,4 @@
-const {app, BrowserWindow, dialog} = require('electron')
+const {app, BrowserWindow} = require('electron')
 const path = require('path')
 const url = require('url')
 
@@ -7,11 +7,9 @@ const url = require('url')
 let win
 
 function createWindow () {
-    // Create the browser window.
+    // Create the browser window and load our stuff
     win = new BrowserWindow({width: 1200, height: 600, })
     win.setMenu(null)
-
-    // and load the index.html of the app.
     win.loadURL(url.format({
         pathname: path.join(__dirname, 'index.html'),
         protocol: 'file:',
@@ -39,18 +37,21 @@ app.on('ready', createWindow)
 app.on('window-all-closed', () => {
     // On macOS it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
-    if (process.platform !== 'darwin') {
-        app.quit()
-    }
+    // if (process.platform !== 'darwin') {
+    //     app.quit()
+    // }
+
+    // ... however, we won't do that
+    app.quit()
 })
 
 app.on('activate', () => {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
-    if (win === null) {
-        createWindow()
-    }
-})
+    // if (win === null) {
+    //     createWindow()
+    // }
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+    // ...however, this would only happen on mac if we allowed the app to stay
+    // active after closing all windows, which we didn't.
+})

@@ -4,14 +4,43 @@ body {
     width: 100vw;
     height: 100vh;
 }
-.controls-panel {
+
+/************************/
+/* Spritesheets sidebar */
+/************************/
+.sidebar {
     min-width: 100px;
     max-width: 100px;
     flex: 0 1 100px;
     overflow: auto;
     background: #F7F7F7;
     border-right: 1px solid #BBB;
+    position: relative;
+}
+
+.sheets-list {
+    margin: 0;
+    padding: 5px 0;
+}
+.sheets-list li {
+    padding: 0 5px;
+}
+.sheets-list .active {
+    background: rgba(0,0,0,0.1);
+}
+
+.sheets-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
     padding: 5px;
+    width: 100%;
+    box-sizing: border-box;
+}
+.sheets-footer button {
+    display: block;
+    width: 100%;
+    text-align: center;
 }
 .image-preview-thing {
     /*width: 80%;*/
