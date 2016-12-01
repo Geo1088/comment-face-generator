@@ -1,10 +1,11 @@
 window.$ = window.jQuery = require('jquery')
 const {dialog} = require('electron').remote
-
-// Initialization
 let createdSpritesheets = 0
 
-// Code creation
+/******************/
+/* CSS generation */
+/******************/
+
 function cssFromSpritesheet (spritesheet) {
     let rules = '' // Stores the rules for each individual face
     if (spritesheet.faces[0] == null) return // enpty faces array
@@ -24,46 +25,43 @@ function cssFromSpritesheet (spritesheet) {
 
     // The base rule that applies to all faces in the spritesheet
     const allFacesRule = `${spritesheet.faces.map(face => `.md [href="${face.code}"]`).join(',')} {
-\tbackground-image: url(%%${spritesheet.sheetName}%%);
+\tbackground-image: url(%%${spritesheet.title}%%);
 ${spritesheet.defaults.width != null ? `\twidth: ${spritesheet.defaults.width}px;\n` : ''}${
 spritesheet.defaults.height != null ? `\theight: ${spritesheet.defaults.height}px;\n` : ''}}`
+    const comment = `/* ${spritesheet.title} */`
     return rules + '\n' + allFacesRule
 }
 
-// Utilities
-function spritesheetItem () {
-    return $('.spritesheet.active')
-}
-function spritesheetData () {
-    return spritesheetItem().data('spritesheet')
-}
-function setSpritesheet (spritesheet) {
-    return spritesheetItem().data('spritesheet', spritesheet)
-}
+/***************************************/
+/* Spritesheet data accessor utilities */
+/***************************************/
+
+const spritesheetItem = () => $('.spritesheet.active')
+const spritesheetData = () => spritesheetItem().data('spritesheet')
+const setSpritesheet = (spritesheetData) => spritesheetItem().data('spritesheet', spritesheetData)
+
 function renameSpritesheet (text) {
     let data = spritesheetData()
     data.title = text
     spritesheetItem().html(text)
     setSpritesheet(data)
 }
-function addFace (face) {
-    let spritesheet = spritesheetData()
-    if (!spritesheet.faces.push) spritesheet.faces = []
-    spritesheet.faces.push(face)
-    setSpritesheet(spritesheet)
-}
+
+// function addFace (face) {
+//     let spritesheet = spritesheetData()
+//     if (!spritesheet.faces.push) spritesheet.faces = []
+//     spritesheet.faces.push(face)
+//     setSpritesheet(spritesheet)
+// }
 // function removeFace (face) {
 //     let spritesheet = spritesheetData()
 //     let index =
 // }
 
-
-// Make a new spritesheet in the sidebar
 function createNewSpritesheet () {
     // Default spritesheet data
     const data = {
         title: `Spritesheet ${++createdSpritesheets}`,
-        sheetName: `sheet${createdSpritesheets}`,
         faces: [],
         defaults: {
             width: null,
@@ -82,11 +80,14 @@ function createNewSpritesheet () {
     updateDisplay()
 }
 
-// Update all the things
+/************/
+/* UI Stuff */
+/************/
+
 function updateDisplay () {
     let data = spritesheetData()
     // CSS preview
-    $('.css-preview').html(cssFromSpritesheet(data) || '/* No CSS to display */')
+    $('.preview.css').html(cssFromSpritesheet(data) || '/* No CSS to display */')
     $('.spritesheet').each(function () {
         let $this = $(this)
         $this.html($this.data('spritesheet').title)
@@ -94,7 +95,9 @@ function updateDisplay () {
     $('.spritesheet-title').val(data.title)
 }
 
-// Event handlers
+/******************/
+/* Event handlers */
+/******************/
 
 $(document).on('click', '.spritesheet', function () {
     $('.sheets-list li').toggleClass('active', false)
@@ -102,19 +105,25 @@ $(document).on('click', '.spritesheet', function () {
     updateDisplay()
 })
 
-$(document).on('ready', createNewSpritesheet)
+$(window).on('load', createNewSpritesheet)
 $(document).on('click', '.create-spritesheet', createNewSpritesheet)
 
 $(document).on('change', '.spritesheet-title', function () {
     renameSpritesheet($(this).val())
 })
 
+// Preview toggling
+$(document).on('click', '.preview-toggles button', function () {
+    const $this = $(this)
+    $('.preview').toggleClass('active', false)
+    $(`.preview.${$this.attr('data-for')}`).toggleClass('active', true)
+})
+
 ///// debugging shit /////
 
 $(document).on('click', '.test-generate-data', function () {
     setSpritesheet({
-        title: 'Some Title',
-        sheetName: 'YelloSheet',
+        title: 'SomeSheet',
         faces: [
             {code: 'yes', bgX: 0, bgY: 0, height: 100},
             {code: 'no', bgX: 0, bgY: 100},

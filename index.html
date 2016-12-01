@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Hello, World!</title>
+        <title>Comment face generator</title>
         <link rel="stylesheet" href="style.css">
         <script type="text/javascript" src="page.js"></script>
     </head>
@@ -25,9 +25,20 @@
                     <button type="button" name="button">Do a thing</button>
                     <button class="test-generate-data">sample gen</button>
                 </div>
+                <div class="sheet-settings">
+                    <label>Default image width: <input type="number" name="" value="0"></label><br>
+                    <label>Default image height: <input type="number" name="" value="0"></label>
+                </div>
             </div>
             <div class="previews">
-                <pre class="css-preview"></pre>
+                <pre class="preview css active"></pre>
+                <div class="preview images">
+                    this is text
+                </div>
+                <div class="preview-toggles">
+                    <button type="button" data-for="css" name="Preview CSS">CSS</button>
+                    <button type="button" data-for="images" name="Preview others">Other</button>
+                </div>
             </div>
         </div>
     </body>

@@ -10,6 +10,10 @@ body {
     font-family: sans-serif;
 }
 
+input, button {
+    height: 22px;
+}
+
 /************************/
 /* Spritesheets sidebar */
 /************************/
@@ -43,11 +47,11 @@ body {
     flex: 0 1 100%;
     overflow-y: scroll;
 }
-.sheets-list li {
+.sheets-list .spritesheet {
     padding: 5px;
     cursor: pointer;
 }
-.sheets-list .active {
+.sheets-list .spritesheet.active {
     background: #DDD;
 }
 
@@ -75,7 +79,6 @@ body {
 .main-view {
     flex: 0 1 100%;
     overflow: auto;
-    padding: 5px;
     display: flex;
     flex-direction: column;
 }
@@ -85,6 +88,7 @@ body {
     flex: 0 1 50%;
     display: flex;
     flex-direction: column;
+    padding: 5px;
 }
 .editor .actions {
     display: flex;
@@ -104,4 +108,27 @@ body {
     font-weight: bold;
     /*border: none;*/
     font-size: 18px;
+}
+.editor .actions .spritesheet-title:not(:hover):not(:focus) {
+    /*border-color: transparent;*/
+}
+
+/* Preview area */
+.previews {
+    border-top: 0.5px solid #BBB;
+    /*background: #F1F1F1;*/
+    flex: 0 1 50%;
+    overflow-y: scroll;
+}
+.preview {
+    margin: 5px;
+}
+.preview:not(.active) {
+    display: none;
+}
+.preview-toggles {
+    position: absolute;
+    right: 17px;
+    bottom: 0;
+    padding: 5px;
 }
