@@ -40,6 +40,12 @@ function spritesheetData () {
 function setSpritesheet (spritesheet) {
     return spritesheetItem().data('spritesheet', spritesheet)
 }
+function renameSpritesheet (text) {
+    let data = spritesheetData()
+    data.title = text
+    spritesheetItem().html(text)
+    setSpritesheet(data)
+}
 function addFace (face) {
     let spritesheet = spritesheetData()
     if (!spritesheet.faces.push) spritesheet.faces = []
@@ -80,9 +86,15 @@ function createNewSpritesheet () {
 function updateDisplay () {
     let data = spritesheetData()
     // CSS preview
-    $('#preview-css').html(cssFromSpritesheet(data) || '/* No CSS to display */')
-    $('.spritesheet-title').attr('value', data.title)
+    $('.css-preview').html(cssFromSpritesheet(data) || '/* No CSS to display */')
+    $('.spritesheet').each(function () {
+        let $this = $(this)
+        $this.html($this.data('spritesheet').title)
+    })
+    $('.spritesheet-title').val(data.title)
 }
+
+// Event handlers
 
 $(document).on('click', '.spritesheet', function () {
     $('.sheets-list li').toggleClass('active', false)
@@ -93,7 +105,9 @@ $(document).on('click', '.spritesheet', function () {
 $(document).on('ready', createNewSpritesheet)
 $(document).on('click', '.create-spritesheet', createNewSpritesheet)
 
-$(document).on('click', '.')
+$(document).on('change', '.spritesheet-title', function () {
+    renameSpritesheet($(this).val())
+})
 
 ///// debugging shit /////
 

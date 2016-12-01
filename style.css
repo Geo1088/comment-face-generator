@@ -19,8 +19,8 @@ body {
     max-width: 200px;
     flex: 0 1 100px;
     overflow: auto;
-    background: #F7F7F7;
-    border-right: 1px solid #BBB;
+    background: #F1F1F1;
+    border-right: 0.5px solid #BBB;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -28,8 +28,8 @@ body {
 
 .sheets-header {
     padding: 5px;
-    border-bottom: 1px solid #BBB;
-    background: #DDD;
+    border-bottom: 0.5px solid #BBB;
+    text-align: center;
 }
 .sheets-header h1 {
     font-size: 18px;
@@ -41,29 +41,31 @@ body {
     margin: 0;
     padding: 0;
     flex: 0 1 100%;
+    overflow-y: scroll;
 }
 .sheets-list li {
-    padding: 5px 5px;
+    padding: 5px;
     cursor: pointer;
 }
 .sheets-list .active {
-    background: rgba(0,0,0,0.1);
+    background: #DDD;
 }
 
 .sheets-footer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    padding: 5px 0 5px 5px;
+    padding: 5px;
     width: 100%;
     display: flex;
+    border-top: 0.5px solid #BBB;
+    min-height: 33px;
 }
 .sheets-footer button {
     display: block;
     flex: 0 1 100%;
-    margin: 0 5px 0 0;
     text-align: center;
     height: 22px;
+}
+.sheets-footer button + button {
+    margin-left: 5px;
 }
 
 /********************/
@@ -86,8 +88,6 @@ body {
 }
 .editor .actions {
     display: flex;
-    padding-bottom: 5px;
-    border-bottom: 1px solid #BBB;
     margin-bottom: 5px;
 }
 .editor .actions > * {
