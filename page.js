@@ -7,29 +7,31 @@ let createdSpritesheets = 0
 /******************/
 
 function cssFromSpritesheet (spritesheet) {
+    if (spritesheet.faces.length < 1) return '/* No faces in the spritesheet */'
+    if (spritesheet.defaults.width == null || !spritesheet.defaults.height == null) return '/* Default dimensions not set */'
+
     let rules = '' // Stores the rules for each individual face
-    if (spritesheet.faces[0] == null) return // enpty faces array
 
     spritesheet.faces.forEach(face => {
         if (face.bgX == null || face.bgY == null) return console.log('Error doing thing with face: no bgX or bgY\n', face)
 
         let width = '', height = ''
         if (face.width && face.width !== spritesheet.defaults.width)
-            width = `; width: ${face.width}px !important`
+            width = `; width:${face.width}px!important`
         if (face.height && face.height !== spritesheet.defaults.height)
-            height = `; height: ${face.height}px !important`
+            height = `; height:${face.height}px!important`
 
-        let rule = `.md [href="${face.code}"] { background:${face.bgX} ${face.bgY}${width}${height} }\n`
+        let rule = `.md [href="${face.code}"]{ background:${face.bgX}${face.bgX === 0 ? '' : 'px'} ${face.bgY}${face.bgY === 0 ? '' : 'px'}${width}${height} }\n`
         rules += rule
     })
 
     // The base rule that applies to all faces in the spritesheet
-    const allFacesRule = `${spritesheet.faces.map(face => `.md [href="${face.code}"]`).join(',')} {
+    const allFacesRule = `\n${spritesheet.faces.map(face => `.md [href="${face.code}"]`).join(',')} {
 \tbackground-image: url(%%${spritesheet.title}%%);
 ${spritesheet.defaults.width != null ? `\twidth: ${spritesheet.defaults.width}px;\n` : ''}${
 spritesheet.defaults.height != null ? `\theight: ${spritesheet.defaults.height}px;\n` : ''}}`
-    const comment = `/* ${spritesheet.title} */`
-    return rules + '\n' + allFacesRule
+    const comment = `/* ${spritesheet.title} */\n\n`
+    return comment + rules + allFacesRule
 }
 
 /***************************************/
@@ -39,13 +41,6 @@ spritesheet.defaults.height != null ? `\theight: ${spritesheet.defaults.height}p
 const spritesheetItem = () => $('.spritesheet.active')
 const spritesheetData = () => spritesheetItem().data('spritesheet')
 const setSpritesheet = (spritesheetData) => spritesheetItem().data('spritesheet', spritesheetData)
-
-function renameSpritesheet (text) {
-    let data = spritesheetData()
-    data.title = text
-    spritesheetItem().html(text)
-    setSpritesheet(data)
-}
 
 // function addFace (face) {
 //     let spritesheet = spritesheetData()
@@ -86,13 +81,20 @@ function createNewSpritesheet () {
 
 function updateDisplay () {
     let data = spritesheetData()
-    // CSS preview
-    $('.preview.css').html(cssFromSpritesheet(data) || '/* No CSS to display */')
+
+    // Editor values
+    $('.spritesheet-title').val(data.title)
+    $('.spritesheet-default-width').val(data.defaults.width)
+    $('.spritesheet-default-height').val(data.defaults.height)
+
+    // Spritesheet titles
     $('.spritesheet').each(function () {
         let $this = $(this)
         $this.html($this.data('spritesheet').title)
     })
-    $('.spritesheet-title').val(data.title)
+
+    // CSS preview
+    $('.preview.css').html(cssFromSpritesheet(data) || '/* No CSS to display */')
 }
 
 /******************/
@@ -109,7 +111,26 @@ $(window).on('load', createNewSpritesheet)
 $(document).on('click', '.create-spritesheet', createNewSpritesheet)
 
 $(document).on('change', '.spritesheet-title', function () {
-    renameSpritesheet($(this).val())
+    let data = spritesheetData()
+    data.title = $(this).val()
+    setSpritesheet(data)
+    updateDisplay()
+})
+$(document).on('change', '.spritesheet-default-width', function () {
+    let data = spritesheetData()
+    if (!data.defaults) data.defaults = {}
+    let val = $(this).val()
+    data.defaults.width = (val === '' ? null : parseInt(val, 10))
+    setSpritesheet(data)
+    updateDisplay()
+})
+$(document).on('change', '.spritesheet-default-height', function () {
+    let data = spritesheetData()
+    if (!data.defaults) data.defaults = {}
+    let val = $(this).val()
+    data.defaults.height = (val === '' ? null : parseInt(val, 10))
+    setSpritesheet(data)
+    updateDisplay()
 })
 
 // Preview toggling
@@ -125,9 +146,9 @@ $(document).on('click', '.test-generate-data', function () {
     setSpritesheet({
         title: 'SomeSheet',
         faces: [
-            {code: 'yes', bgX: 0, bgY: 0, height: 100},
-            {code: 'no', bgX: 0, bgY: 100},
-            {code: 'abstain', bgX: 0, bgY: 150}
+            {code: 'yes', bgX: 0, bgY: 0, width: 100, height: 100},
+            {code: 'no', bgX: 0, bgY: 100, width: 100, height: 50},
+            {code: 'abstain', bgX: 0, bgY: 150, width: 100, height: 50}
         ],
         defaults: {
             width: 100,

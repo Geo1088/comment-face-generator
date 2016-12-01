@@ -7,11 +7,12 @@ body {
     margin: 0;
     width: 100vw;
     height: 100vh;
-    font-family: sans-serif;
+    font-family: 'Open Sans', sans-serif;
 }
 
 input, button {
     height: 22px;
+    font-family: inherit;
 }
 
 /************************/
@@ -33,7 +34,7 @@ input, button {
 .sheets-header {
     padding: 5px;
     border-bottom: 0.5px solid #BBB;
-    text-align: center;
+    /*text-align: center;*/
 }
 .sheets-header h1 {
     font-size: 18px;
@@ -100,17 +101,30 @@ input, button {
 .editor .actions > * + * {
     margin-left: 5px;
 }
-.editor .actions > button {
+.editor .actions button {
     /*width: 100px;*/
+}
+.editor .actions input[type="number"] {
+    width: 40px;
 }
 .editor .actions .spritesheet-title {
     /*flex: 0 1 100%;*/
     font-weight: bold;
     /*border: none;*/
-    font-size: 18px;
+    font-size: 16px;
 }
 .editor .actions .spritesheet-title:not(:hover):not(:focus) {
     /*border-color: transparent;*/
+}
+.editor .actions .input-group {
+    display: flex;
+    height: 22px;
+    /*background: #F7F7F7;*/
+    /*box-shadow: inset 0 0 0 0.5px #A9A9A9;*/
+    padding: 0 5px;
+}
+.actions .input-group * + * {
+    margin-left: 5px;
 }
 
 /* Preview area */
@@ -126,6 +140,11 @@ input, button {
 .preview:not(.active) {
     display: none;
 }
+.preview.css {
+    font-family: 'Source Code Pro', monospace;
+    white-space: pre-wrap;
+}
+
 .preview-toggles {
     position: absolute;
     right: 17px;

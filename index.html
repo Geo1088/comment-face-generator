@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <title>Comment face generator</title>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans|Source+Code+Pro" rel="stylesheet">
         <link rel="stylesheet" href="style.css">
         <script type="text/javascript" src="page.js"></script>
     </head>
@@ -18,16 +19,14 @@
             </div>
         </div>
         <div class="main-view">
-            <!-- <img alt="Preview image" id="preview-img"> -->
             <div class="editor">
                 <div class="actions">
                     <input class="spritesheet-title "type="text" name="spritesheet-title" value="" placeholder="Spritesheet 1">
-                    <button type="button" name="button">Do a thing</button>
-                    <button class="test-generate-data">sample gen</button>
-                </div>
-                <div class="sheet-settings">
-                    <label>Default image width: <input type="number" name="" value="0"></label><br>
-                    <label>Default image height: <input type="number" name="" value="0"></label>
+                    <!-- <button type="button" name="button">Do a thing</button> -->
+                    <span class="input-group spritesheet-default-dimensions">
+                        <span>DD:</span><input class="spritesheet-default-width" type="number" name="spritesheet-default-width" value="0"><span>x</span><input class="spritesheet-default-height" type="number" name="spritesheet-default-height" value="0">
+                    </span>
+                    <button class="test-generate-data">Gen. Sample</button>
                 </div>
             </div>
             <div class="previews">
