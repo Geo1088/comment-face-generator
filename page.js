@@ -6,8 +6,9 @@ let createdSpritesheets = 0
 
 // Code creation
 function cssFromSpritesheet (spritesheet) {
-    console.log(spritesheet)
     let rules = '' // Stores the rules for each individual face
+    if (spritesheet.faces[0] == null) return // enpty faces array
+
     spritesheet.faces.forEach(face => {
         if (face.bgX == null || face.bgY == null) return console.log('Error doing thing with face: no bgX or bgY\n', face)
 
@@ -54,15 +55,23 @@ function addFace (face) {
 // Make a new spritesheet in the sidebar
 function createNewSpritesheet () {
     // Default spritesheet data
-    const defaults = {title: `Spritesheet ${++createdSpritesheets}`}
+    const data = {
+        title: `Spritesheet ${++createdSpritesheets}`,
+        sheetName: `sheet${createdSpritesheets}`,
+        faces: [],
+        defaults: {
+            width: null,
+            height: null
+        }
+    }
     // Template for thing
-    const newListItem = $(`<li class="spritesheet active"><a href="#">${defaults.title}</a></li>`)
+    const newListItem = $(`<li class="spritesheet active">${data.title}</li>`)
     // Set everything else to inactive (the new item is set to active in the template)
     $('.spritesheet').toggleClass('active', false)
     // Add to the list
     $('.sheets-list').append(newListItem)
-    // Set the data
-    setSpritesheet(defaults)
+    // Set the data of this newly-created spritesheet
+    setSpritesheet(data)
     // Reload the things
     updateDisplay()
 }
@@ -70,9 +79,9 @@ function createNewSpritesheet () {
 // Update all the things
 function updateDisplay () {
     let data = spritesheetData()
-    console.log(data)
     // CSS preview
     $('#preview-css').html(cssFromSpritesheet(data) || '/* No CSS to display */')
+    $('.spritesheet-title').attr('value', data.title)
 }
 
 $(document).on('click', '.spritesheet', function () {
@@ -81,10 +90,10 @@ $(document).on('click', '.spritesheet', function () {
     updateDisplay()
 })
 
+$(document).on('ready', createNewSpritesheet)
 $(document).on('click', '.create-spritesheet', createNewSpritesheet)
 
-$(document).on('ready', createNewSpritesheet)
-
+$(document).on('click', '.')
 
 ///// debugging shit /////
 
