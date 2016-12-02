@@ -3,42 +3,52 @@
     <head>
         <meta charset="utf-8">
         <title>Comment face generator</title>
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans|Source+Code+Pro" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans|Asap|Source+Code+Pro" rel="stylesheet">
         <link rel="stylesheet" href="style.css">
         <script type="text/javascript" src="page.js"></script>
     </head>
     <body>
+
         <div class="sidebar">
             <div class="sheets-header">
                 <h1>Spritesheets</h1>
+                <button class="create-spritesheet" helptext="Create a new spritesheet">+</button>
             </div>
             <ul class="sheets-list"></ul>
             <div class="sheets-footer">
-                <button class="create-spritesheet" type="button" name="New spritesheet" title="Create a new spritesheet">New</button>
-                <button class="test" type="button" name="button">akljsd</button>
+                <!-- <button class="test" type="button" name="button">akljsd</button> -->
             </div>
         </div>
+
         <div class="main-view">
-            <div class="editor">
-                <div class="actions">
-                    <input class="spritesheet-title "type="text" name="spritesheet-title" value="" placeholder="Spritesheet 1">
-                    <!-- <button type="button" name="button">Do a thing</button> -->
-                    <span class="input-group spritesheet-default-dimensions">
-                        <span>DD:</span><input class="spritesheet-default-width" type="number" name="spritesheet-default-width" value="0"><span>x</span><input class="spritesheet-default-height" type="number" name="spritesheet-default-height" value="0">
-                    </span>
-                    <button class="test-generate-data">Gen. Sample</button>
+            <div class="spritesheet-actions">
+                <input class="spritesheet-title "type="text" name="spritesheet-title" value="" placeholder="SheetName">
+
+                <span class="input-group spritesheet-default-dimensions">
+                    <span>DD:</span>
+                    <input class="spritesheet-default-width" type="number" name="spritesheet-default-width" value="0">
+                    <span>x</span>
+                    <input class="spritesheet-default-height" type="number" name="spritesheet-default-height" value="0">
+                </span>
+
+                <div class="right">
+                    <button class="test-generate-data" align="right">Gen. Sample</button>
+                    <button class="spritesheet-delete">Delete</button>
+                    <div class="tab-buttons">
+                        <span>View:</span>
+                        <button data-for="faces">Faces</button>
+                        <button data-for="preview-css">CSS</button>
+                        <button data-for="preview-raw-data">Raw</button>
+                    </div>
                 </div>
             </div>
-            <div class="previews">
-                <pre class="preview css active"></pre>
-                <div class="preview images">
-                    this is text
-                </div>
-                <div class="preview-toggles">
-                    <button type="button" data-for="css" name="Preview CSS">CSS</button>
-                    <button type="button" data-for="images" name="Preview others">Other</button>
-                </div>
+
+            <div class="faces-and-previews tabbed">
+                <div class="tab faces active"></div>
+                <pre class="tab preview-css"></pre>
+                <pre class="tab preview-raw-data"></pre>
             </div>
         </div>
+
     </body>
 </html>

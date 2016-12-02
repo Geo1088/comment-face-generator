@@ -29,15 +29,21 @@ input, button {
     position: relative;
     display: flex;
     flex-direction: column;
+    -webkit-user-select: none;
 }
 
 .sheets-header {
     padding: 5px;
     border-bottom: 0.5px solid #BBB;
+    display: flex;
+    justify-content: space-between;
+    min-height: 32.5px;
+    height: 32.5px;
     /*text-align: center;*/
 }
 .sheets-header h1 {
     font-size: 18px;
+    font-family: 'Asap', 'Trebuchet MS', sans-serif;
     height: 22px;
     margin: 0;
 }
@@ -82,72 +88,106 @@ input, button {
     overflow: auto;
     display: flex;
     flex-direction: column;
+    -webkit-user-select: none;
 }
 
+/********************/
 /* Editing controls */
-.editor {
-    flex: 0 1 50%;
+/********************/
+
+.spritesheet-actions {
+    /*flex: 0 1 50%;*/
     display: flex;
-    flex-direction: column;
+    /*margin-bottom: 5px;*/
+    background: #F1F1F1;
     padding: 5px;
+    border-bottom: 0.5px solid #BBB;
+    min-height: 32.5px;
+    height: 32.5px;
 }
-.editor .actions {
-    display: flex;
-    margin-bottom: 5px;
-}
-.editor .actions > * {
+.spritesheet-actions * {
     height: 22px;
 }
-.editor .actions > * + * {
-    margin-left: 5px;
-}
-.editor .actions button {
+.spritesheet-actions button {
     /*width: 100px;*/
 }
-.editor .actions input[type="number"] {
+.spritesheet-actions input[type="number"] {
     width: 40px;
 }
-.editor .actions .spritesheet-title {
+.spritesheet-actions .spritesheet-title {
     /*flex: 0 1 100%;*/
     font-weight: bold;
     /*border: none;*/
     font-size: 16px;
+    border: 0;
+    background: transparent;
 }
-.editor .actions .spritesheet-title:not(:hover):not(:focus) {
+.spritesheet-actions .spritesheet-title:not(:hover):not(:focus) {
     /*border-color: transparent;*/
 }
-.editor .actions .input-group {
+.spritesheet-actions .input-group {
     display: flex;
     height: 22px;
     /*background: #F7F7F7;*/
     /*box-shadow: inset 0 0 0 0.5px #A9A9A9;*/
     padding: 0 5px;
 }
-.actions .input-group * + * {
+.spritesheet-actions .right {
+    position: absolute;
+    right: 0;
+    padding: 0 5px;
+    display: flex;
+}
+.spritesheet-actions * {
+    display: flex;
+}
+.spritesheet-actions *+* {
     margin-left: 5px;
 }
 
-/* Preview area */
-.previews {
-    border-top: 0.5px solid #BBB;
-    /*background: #F1F1F1;*/
-    flex: 0 1 50%;
+/**************************/
+/* Face edit/preview area */
+/**************************/
+
+.faces-and-previews {
+    flex: 0 1 100%;
     overflow-y: scroll;
 }
-.preview {
+.faces-and-previews .tab {
     margin: 5px;
 }
-.preview:not(.active) {
+.tab:not(.active) {
     display: none;
 }
-.preview.css {
-    font-family: 'Source Code Pro', monospace;
-    white-space: pre-wrap;
-}
-
-.preview-toggles {
+.tabbed .tab-buttons {
     position: absolute;
     right: 17px;
     bottom: 0;
     padding: 5px;
+}
+.preview-css {
+    font-family: 'Source Code Pro', monospace;
+    white-space: pre-wrap;
+    -webkit-user-select: all;
+}
+.preview-raw-data {
+    font-family: 'Source Code Pro', monospace;
+    -webkit-user-select: all;
+}
+
+/* Faces */
+
+.face {
+    -webkit-user-select: all;
+    color: #FFF;
+    font-family: 'Verdana', sans-serif; /* Reddit font stack */
+    text-shadow:
+        1px 1px #000,
+        1px 0 #000,
+        1px -1px #000,
+        0 -1px #000,
+        -1px -1px #000,
+        -1px 0 #000,
+        -1px 1px #000,
+        0 1px #000;
 }
