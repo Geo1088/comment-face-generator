@@ -8,8 +8,8 @@ let win
 
 function createWindow () {
     // Create the browser window and load our stuff
-    win = new BrowserWindow({width: 1200, height: 600})
-    win.setMenu(null)
+    win = new BrowserWindow({width: 1200, height: 600, autoHideMenuBar: true})
+    // win.setMenu(null)
     win.loadURL(url.format({
         pathname: path.join(__dirname, 'index.html'),
         protocol: 'file:',

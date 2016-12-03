@@ -1,3 +1,7 @@
 {
-    "main": "main.js"
+  "main": "main.js",
+  "dependencies": {
+    "jimp": "^0.2.27",
+    "jquery": "^3.1.1"
+  }
 }

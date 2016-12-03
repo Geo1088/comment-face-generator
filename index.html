@@ -10,16 +10,19 @@
     <body>
 
         <div class="sidebar">
-            <div class="sheets-header">
+            <div class="header sheets-header">
                 <h1>Spritesheets</h1>
                 <button class="create-spritesheet" helptext="Create a new spritesheet">+</button>
             </div>
             <ul class="sheets-list"></ul>
-            <div class="sheets-footer">
-                <!-- <button class="test" type="button" name="button">akljsd</button> -->
+            <div class="header project-settings-header">
+                <h1>Project settings</h1>
+            </div>
+            <div class="project-settings-view">
+                Soon&trade;
             </div>
         </div>
-
+        
         <div class="main-view">
             <div class="spritesheet-actions">
                 <input class="spritesheet-title "type="text" name="spritesheet-title" value="" placeholder="SheetName">
@@ -30,12 +33,13 @@
                     <span>x</span>
                     <input class="spritesheet-default-height" type="number" name="spritesheet-default-height" value="0">
                 </span>
+                <button class="spritesheet-delete">Delete spritesheet</button>
 
                 <div class="right">
-                    <button class="test-generate-data" align="right">Gen. Sample</button>
-                    <button class="spritesheet-delete">Delete</button>
+                    <button class="test-add-face-button">Add face</button>
+                    <button class="delete-face-button">Delete face</button>
+                    &nbsp;&bull;
                     <div class="tab-buttons">
-                        <span>View:</span>
                         <button data-for="faces">Faces</button>
                         <button data-for="preview-css">CSS</button>
                         <button data-for="preview-raw-data">Raw</button>
