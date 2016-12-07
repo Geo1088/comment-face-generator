@@ -10,7 +10,6 @@ const Image = require('./Image.js')
 
 // Initialization
 const project = new Project() // The current project - one per window
-let createdSheets = 0 // Used in numbering of new spritesheets
 
 
 // Utilities
