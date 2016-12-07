@@ -34,7 +34,7 @@ function selectSpritesheet (data) {
 }
 function createSpritesheet (data) {
     if (!data) data = {
-        name: 'Untitled Spritesheet',
+        name: `Sheet${project.createdSpritesheets + 1}`,
         defaultWidth: 100,
         defaultHeight: 100
     }
@@ -52,14 +52,30 @@ function deleteSpritesheet (data) {
 
 // Events
 const $document = $(document)
+
 $document.on('click', '.create-spritesheet', function () {
     createSpritesheet()
 })
+$(window).on('load', function () {
+    createSpritesheet()
+})
+
 $document.on('click', '.spritesheet', function () {
     selectSpritesheet($(this).index())
 })
+
 $document.on('change', '.spritesheet-title', function () {
     const spritesheet = getSelectedSpritesheet()
     spritesheet.name = $(this).val()
     $('.spritesheet.active').html(spritesheet.name)
+})
+$document.on('change', '.spritesheet-default-width', function () {
+    const spritesheet = getSelectedSpritesheet()
+    const val = Math.max(parseInt($(this).val()), 0)
+    spritesheet.defaultWidth = val
+})
+$document.on('change', '.spritesheet-default-height', function () {
+    const spritesheet = getSelectedSpritesheet()
+    const val = Math.max(parseInt($(this).val()), 0)
+    spritesheet.defaultHeight = val
 })

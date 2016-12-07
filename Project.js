@@ -7,9 +7,11 @@ class Project {
         this.useSlashes = options.useSlashes || false
 
         this.spritesheets = []
+        this.createdSpritesheets = 0
     }
 
     createSpritesheet (data) {
+        this.createdSpritesheets++
         const newSheet = new Spritesheet(data)
         this.spritesheets.push(newSheet)
         return newSheet
