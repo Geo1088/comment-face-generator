@@ -18,14 +18,26 @@ function getSelectedSpritesheet () {
     const $listItem = $('.spritesheet.active')
     return project.spritesheets[$listItem.index()]
 }
+function getSelectedSpritesheetElement () {
+    return $('.spritesheet.active')
+}
 function selectSpritesheet (data) {
     const index = (typeof data === 'number' ? data : project.spritesheets.indexOf(data))
     $('.spritesheet').toggleClass('active', false)
     $('.spritesheet').eq(index).toggleClass('active', true)
+
+    // Update spritesheet option
+    const spritesheet = getSelectedSpritesheet()
+    $('.spritesheet-title').val(spritesheet.name)
+    $('.spritesheet-default-width').val(spritesheet.defaultWidth)
+    $('.spritesheet-default-height').val(spritesheet.defaultHeight)
 }
 function createSpritesheet (data) {
-    if (!data) data = {}
-    if (!data.name) data.name = `Sheet${createdSheets++}`
+    if (!data) data = {
+        name: 'Untitled Spritesheet',
+        defaultWidth: 100,
+        defaultHeight: 100
+    }
 
     const newSheet = project.createSpritesheet(data)
     $('.spritesheets-list').append($(newSheet.listItem))
@@ -39,9 +51,15 @@ function deleteSpritesheet (data) {
 
 
 // Events
-$(document).on('click', '.create-spritesheet', function () {
+const $document = $(document)
+$document.on('click', '.create-spritesheet', function () {
     createSpritesheet()
 })
-$(document).on('click', '.spritesheet', function () {
+$document.on('click', '.spritesheet', function () {
     selectSpritesheet($(this).index())
+})
+$document.on('change', '.spritesheet-title', function () {
+    const spritesheet = getSelectedSpritesheet()
+    spritesheet.name = $(this).val()
+    $('.spritesheet.active').html(spritesheet.name)
 })
