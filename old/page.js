@@ -95,7 +95,7 @@ function setFaceAtIndex (index, faceData) {
 }
 function removeFaceFromSpritesheet (faceIndex) {
     let data = spritesheetData()
-    delete data.faces[faceIndex]
+    data.faces.splice(faceIndex, 1)
     setSpritesheet(data)
     updateFaceDisplay()
 }

@@ -2,14 +2,13 @@ const jimp = require('jimp')
 const Image = require('./Image.js')
 
 class Face {
-    constructor (data, spritesheet) {
-        this.spritesheet = spritesheet
-
+    constructor (data) {
         this.name = data.name || 'face'
         this.width = data.width || this.USE_DEFAULT
         this.height = data.height || this.USE_DEFAULT
 
         this.image = new Image(data.image)
+        this.spritesheet = null
     }
 
     get selector () {

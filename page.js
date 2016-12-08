@@ -10,6 +10,7 @@ const Image = require('./Image.js')
 
 // Initialization
 const project = new Project() // The current project - one per window
+const $document = $(document)
 
 
 // Utilities
@@ -44,19 +45,21 @@ function createSpritesheet (data) {
 }
 function deleteSpritesheet (data) {
     const index = (typeof data === 'number' ? data : project.spritesheets.indexOf(data))
-    delete projects.spritesheets[index]
+    project.spritesheets.splice(index, 1)
     $('.spritesheet').eq(index).remove()
 }
 
 
 // Events
-const $document = $(document)
-
 $document.on('click', '.create-spritesheet', function () {
     createSpritesheet()
 })
 $(window).on('load', function () {
     createSpritesheet()
+})
+
+$document.on('click', '.delete-spritesheet', function () {
+    deleteSpritesheet(getSelectedSpritesheet())
 })
 
 $document.on('click', '.spritesheet', function () {
@@ -77,4 +80,16 @@ $document.on('change', '.spritesheet-default-height', function () {
     const spritesheet = getSelectedSpritesheet()
     const val = Math.max(parseInt($(this).val()), 0)
     spritesheet.defaultHeight = val
+})
+
+$document.on('click', '.add-face', function () {
+    const spritesheet = getSelectedSpritesheet()
+    spritesheet.createFace({
+        name: 'yes',
+        width: 100,
+        height: 100,
+        image: {
+            path: 'C:\\Users\\George\\Desktop\\q.png'
+        }
+    })
 })

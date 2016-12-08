@@ -6,10 +6,14 @@ class Spritesheet {
         this.faces = []
         this.defaultWidth = data.defaultWidth
         this.defaultHeight = data.defaultHeight
+
+        this.project = null
     }
 
     createFace (data) {
-        this.addFace(new Face(data))
+        const face = new Face(data)
+        this.addFace(face)
+        return face
     }
 
     addFace (face) {
@@ -18,10 +22,9 @@ class Spritesheet {
     }
 
     removeFace (face) {
-        if (typeof face === 'number')
-            delete this.faces[face]
-        else
-            delete this.faces[this.faces.indexOf(face)]
+        const index = (typeof face === 'number' ? face : this.faces.indexOf(face))
+        this.faces[index].spritesheet = null
+        this.faces.splice(index, 1)
     }
 
     get listItem () {
