@@ -48,6 +48,18 @@ class Face {
         return 0 // TODO
     }
 
+    get computedWidth () {
+        let width = this.width
+        if (width === '') width = this.spritesheet.defaultWidth
+        return width
+    }
+
+    get computedHeight () {
+        let height = this.height
+        if (height === '') height = this.spritesheet.defaultHeight
+        return height
+    }
+
     get fullCSS () {
         const widthPart = (this.width === this.USE_DEFAULT ? '' : `; width:${this.width}px`)
         const heightPart = (this.height === this.USE_DEFAULT ? '' : `; height:${this.height}px`)
@@ -62,7 +74,9 @@ class Face {
                 this.width = image.bitmap.width
                 this.height = image.bitmap.height
             }
-            image.cover(this.width, this.height).getBase64(jimp.AUTO, callback)
+            image
+                .cover(this.computedWidth, this.computedHeight)
+                .getBase64(jimp.AUTO, callback)
         })
     }
 
@@ -71,8 +85,8 @@ class Face {
             if (err) callback(err)
 
             // Set sizing properties to prevent the img from getting too big
-            let width = this.width > 200 ? ' width="200"' : ''
-            let height = this.height > 200 ? ' height="200"' : ''
+            let width = this.computedWidth > 200 ? ' width="200"' : ''
+            let height = this.computedHeight > 200 ? ' height="200"' : ''
             if (width && height) {
                 if (this.width > this.height)
                     height = ''
@@ -97,9 +111,9 @@ class Face {
                     ${faceHTML}
                     <div class="face-actions">
                         <pre><code>${this.name}</code></pre>
-                        <input class="face-width" type="number" value="${this.displayWidth}">
+                        <input class="face-width" type="number" placeholder="${this.spritesheet.defaultWidth}" value="${this.displayWidth}">
                         x
-                        <input class="face-height" type="number" value="${this.displayHeight}">
+                        <input class="face-height" type="number" placeholder="${this.spritesheet.defaultHeight}" value="${this.displayHeight}">
                     </div>
                 </div>
             `)

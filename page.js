@@ -81,11 +81,26 @@ $document.on('change', '.spritesheet-default-width', function () {
     const spritesheet = getSelectedSpritesheet()
     const val = Math.max(parseInt($(this).val()), 0)
     spritesheet.defaultWidth = val
+
+    // Update placeholders on existing faces
+    $('.face-width').attr('placeholder', val)
+
+    // Loop through all the faces and update the ones that need updating
+    $('.face').each(function (index) {
+        const $this = $(this)
+        if ($this.find('.face-width[value=""]')) {
+            spritesheet.faces[index].getPreviewHTML((err, html) => {
+                $this.children('.face-preview-wrap').remove()
+                $this.prepend($(html))
+            })
+        }
+    })
 })
 $document.on('change', '.spritesheet-default-height', function () {
     const spritesheet = getSelectedSpritesheet()
     const val = Math.max(parseInt($(this).val()), 0)
     spritesheet.defaultHeight = val
+    $('.face-height').attr('placeholder', val)
 })
 
 // Events - face controls
@@ -127,7 +142,7 @@ $document.on('change', '.face-width', function () {
 
     // Get the current value, and change it around if necessary
     let val = parseInt($this.val(), 10)
-    if (val === NaN) val = Face.USE_DEFAULT
+    if (isNaN(val)) val = ''
 
     // Write back to the data object
     const index = $face.index()
@@ -147,7 +162,7 @@ $document.on('change', '.face-height', function () {
 
     // Get the current value, and change it around if necessary
     let val = parseInt($this.val(), 10)
-    if (val === NaN) val = Face.USE_DEFAULT
+    if (isNaN(val)) val = ''
 
     // Write back to the data object
     const index = $face.index()
