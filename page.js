@@ -53,7 +53,7 @@ function deleteSpritesheet (data) {
 }
 
 
-// Events
+// Events - spritesheet controls
 $document.on('click', '.create-spritesheet', function () {
     createSpritesheet()
 })
@@ -88,30 +88,75 @@ $document.on('change', '.spritesheet-default-height', function () {
     spritesheet.defaultHeight = val
 })
 
+// Events - face controls
 $document.on('click', '.add-face', function () {
-    const filepath = dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
+    // Get an image path from the user, and load it
+    let filepath = dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
         title: 'Import a face',
         filters: [
             {name: 'Images', extensions: ['png', 'jpg', 'jpeg']}
         ]
-    })[0]
-    if (!path) return
+    })
+    if (!filepath) return // showOpenDialog returns undefined on cancel
+    filepath = filepath[0] // and returns an array all the other times
 
+    // Create a new face object and add it to the current spritesheet
     const spritesheet = getSelectedSpritesheet()
     const face = spritesheet.createFace({
-        name: path.basename(filepath).replace(/\.[^\.]*$/, '').replace(/\s/g, '_'),
-        width: 100,
-        height: 100,
+        name: path
+            .basename(filepath)
+            .replace(/\.[^\.]*$/, '')
+            .replace(/\s/g, '_'),
+        width: spritesheet.defaultWidth,
+        height: spritesheet.defaultHeight,
         image: {
             path: filepath
         }
     })
 
-    let previewHTML
-    function doThing () {
-        previewHTML = face.previewHTML
-        if (!previewHTML) setTimeout(doThing, 100)
-        $('.faces').append($(previewHTML))
-    }
-    doThing()
+    face.getFullHTML((err, html) => {
+        $('.faces').append($(html))
+    })
+})
+$document.on('click', '.delete-face', function () {
+    // TODO
+})
+$document.on('change', '.face-width', function () {
+    const $this = $(this)
+    const $face = $this.closest('.face')
+
+    // Get the current value, and change it around if necessary
+    let val = parseInt($this.val(), 10)
+    if (val === NaN) val = Face.USE_DEFAULT
+
+    // Write back to the data object
+    const index = $face.index()
+    const face = getSelectedSpritesheet().faces[index]
+    face.width = val
+
+    // Update the display image with the new dimensions
+    face.getPreviewHTML((err, html) => {
+        $face.children('.face-preview-wrap').remove()
+        $face.prepend($(html))
+    })
+})
+
+$document.on('change', '.face-height', function () {
+    const $this = $(this)
+    const $face = $this.closest('.face')
+
+    // Get the current value, and change it around if necessary
+    let val = parseInt($this.val(), 10)
+    if (val === NaN) val = Face.USE_DEFAULT
+
+    // Write back to the data object
+    const index = $face.index()
+    const face = getSelectedSpritesheet().faces[index]
+    face.height = val
+
+    // Update the display image with the new dimensions
+    face.getPreviewHTML((err, html) => {
+        $face.children('.face-preview-wrap').remove()
+        $face.prepend($(html))
+    })
 })

@@ -59,21 +59,40 @@ class Face {
         return `${this.selector}{background:${this.bgX} ${this.bgY}${widthPart}${heightPart}}`
     }
 
-    get previewHTML () {
-        if (!this.image.base64URL) return
-        return `
-            <div class="face">
+    sizedPreviewImageURL (callback) {
+        this.image.jimp((err, image) => {
+            if (err) callback(err)
+            image.cover(this.width, this.height).getBase64(jimp.AUTO, callback)
+        })
+    }
+
+    getPreviewHTML (callback) {
+        this.sizedPreviewImageURL((err, url) => {
+            if (err) callback(err)
+            callback(null, `
                 <div class="face-preview-wrap">
-                    <img class="face-preview" src="${this.image.base64URL}">
+                    <img class="face-preview" src="${url}">
                 </div>
-                <div class="face-actions">
-                    <pre><code>${this.name}</code></pre>
-                    <input class="face-width" type="number" value="${this.displayWidth}">
-                    x
-                    <input class="face-height" type="number" value="${this.displayHeight}">
+            `)
+        })
+    }
+
+    getFullHTML (callback) {
+        // if (!this.image.base64URL) return
+        this.getPreviewHTML((err, faceHTML) => {
+            if (err) callback(err)
+            callback(null, `
+                <div class="face">
+                    ${faceHTML}
+                    <div class="face-actions">
+                        <pre><code>${this.name}</code></pre>
+                        <input class="face-width" type="number" value="${this.displayWidth}">
+                        x
+                        <input class="face-height" type="number" value="${this.displayHeight}">
+                    </div>
                 </div>
-            </div>
-        `
+            `)
+        })
     }
 }
 

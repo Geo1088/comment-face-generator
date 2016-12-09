@@ -190,7 +190,7 @@ input, button {
     align-items: center;
     justify-content: center;
     width: 200px;
-    height: 200px;
+    max-height: 200px;
     margin-right: 5px;
 }
 .face-preview {
