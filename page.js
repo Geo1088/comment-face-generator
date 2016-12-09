@@ -14,9 +14,11 @@ const $document = $(document)
 
 
 // Utilities
+function getSelectedSpritesheetIndex () {
+    return $('.spritesheet.active').index()
+}
 function getSelectedSpritesheet () {
-    const $listItem = $('.spritesheet.active')
-    return project.spritesheets[$listItem.index()]
+    return project.spritesheets[getSelectedSpritesheetIndex()]
 }
 function getSelectedSpritesheetElement () {
     return $('.spritesheet.active')
@@ -59,7 +61,10 @@ $(window).on('load', function () {
 })
 
 $document.on('click', '.delete-spritesheet', function () {
-    deleteSpritesheet(getSelectedSpritesheet())
+    let index = getSelectedSpritesheetIndex()
+    deleteSpritesheet(index)
+    if (index > 0) index--
+    selectSpritesheet(index)
 })
 
 $document.on('click', '.spritesheet', function () {
@@ -83,13 +88,29 @@ $document.on('change', '.spritesheet-default-height', function () {
 })
 
 $document.on('click', '.add-face', function () {
+    const path = dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
+        title: 'Import a face',
+        filters: [
+            {name: 'Images', extensions: ['png', 'jpg', 'jpeg']}
+        ]
+    })[0]
+    if (!path) return
+
     const spritesheet = getSelectedSpritesheet()
-    spritesheet.createFace({
+    const face = spritesheet.createFace({
         name: 'yes',
         width: 100,
         height: 100,
         image: {
-            path: 'C:\\Users\\George\\Desktop\\q.png'
+            path: path
         }
     })
+
+    let previewHTML
+    function doThing () {
+        previewHTML = face.previewHTML
+        if (!previewHTML) setTimeout(doThing, 100)
+        $('.faces').append($(previewHTML))
+    }
+    doThing()
 })

@@ -28,16 +28,6 @@ class Image {
     jimp (callback) {
         return jimp.read(this.buffer, callback)
     }
-
-    getPreviewHTML (callback) {
-        this.jimp((err, image) => {
-            if (err) callback(err)
-            image.scaleToFit(200, 200).getBase64(jimp.AUTO, (err, url) => {
-                if (err) callback(err)
-                callback(null, `<img src="data:${url}">`)
-            })
-        })
-    }
 }
 
 module.exports = Image

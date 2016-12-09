@@ -9,11 +9,31 @@ class Face {
 
         this.image = new Image(data.image)
         this.spritesheet = null
+
+        // Create some additional information for future use
+        jimp.read(this.image.buffer, (err, image) => {
+            const limit = 200
+            image.cover(this.width, this.height, (err, image) => {
+                const setProperties = (err, base64) => {
+                    this.previewImageURL = base64
+                }
+
+                if (image.bitmap.width > limit || image.bitmap.height > limit)
+                    image.scaleToFit(limit, limit).getBase64(jimp.AUTO, setProperties)
+                else
+                    image.getBase64(jimp.AUTO, setProperties)
+            })
+        })
     }
 
     get selector () {
         return `.md [href="#${this.name}"]`
     }
+
+    // get width () {
+    //     if (this.width === this.USE_DEFAULT) return this.spritesheet ? this.spritesheet.defaultWidth
+    //     return this.width
+    // }
 
     get bgX () {
         return 0 // TODO
@@ -30,8 +50,13 @@ class Face {
     }
 
     get previewHTML () {
-        let previewData = ''
-        return `<div class="face-preview"><img`
+        if (!this.image.base64URL) return
+        return `
+        <div class="face">
+            <div class="face-preview-wrap">
+                <img class="face-preview" src="${this.image.base64URL}">
+            </div>
+            <`
     }
 }
 
