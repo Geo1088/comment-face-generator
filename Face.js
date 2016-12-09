@@ -4,26 +4,21 @@ const Image = require('./Image.js')
 class Face {
     constructor (data) {
         this.name = data.name || 'face'
-        this.width = data.width || this.USE_DEFAULT
-        this.height = data.height || this.USE_DEFAULT
+        this.width = data.width
+        this.height = data.height
 
+        // The image that this face displays
         this.image = new Image(data.image)
+
+        // A reference to the spritesheet containing this face, or null
         this.spritesheet = null
 
-        // Create some additional information for future use
-        jimp.read(this.image.buffer, (err, image) => {
-            const limit = 200
-            image.cover(this.width, this.height, (err, image) => {
-                const setProperties = (err, base64) => {
-                    this.previewImageURL = base64
-                }
-
-                if (image.bitmap.width > limit || image.bitmap.height > limit)
-                    image.scaleToFit(limit, limit).getBase64(jimp.AUTO, setProperties)
-                else
-                    image.getBase64(jimp.AUTO, setProperties)
-            })
-        })
+        // This is a bit of a hack. If it's true, the face's width and height
+        // will be set to the actual width and height of the image the next time
+        // the preview is updated. The value is set back to false after the
+        // recalculation. This is set to true by default so these calculations
+        // run the first time, but it really shouldn't be used elsewhere.
+        this.useNativeRes = true
     }
 
     get selector () {
@@ -62,6 +57,11 @@ class Face {
     sizedPreviewImageURL (callback) {
         this.image.jimp((err, image) => {
             if (err) callback(err)
+            if (this.useNativeRes) {
+                this.useNativeRes = false
+                this.width = image.bitmap.width
+                this.height = image.bitmap.height
+            }
             image.cover(this.width, this.height).getBase64(jimp.AUTO, callback)
         })
     }
@@ -69,16 +69,27 @@ class Face {
     getPreviewHTML (callback) {
         this.sizedPreviewImageURL((err, url) => {
             if (err) callback(err)
+
+            // Set sizing properties to prevent the img from getting too big
+            let width = this.width > 200 ? ' width="200"' : ''
+            let height = this.height > 200 ? ' height="200"' : ''
+            if (width && height) {
+                if (this.width > this.height)
+                    height = ''
+                else
+                    width = ''
+            }
+
+            // Template and call back
             callback(null, `
                 <div class="face-preview-wrap">
-                    <img class="face-preview" src="${url}">
+                    <img class="face-preview" src="${url}"${width}${height}>
                 </div>
             `)
         })
     }
 
     getFullHTML (callback) {
-        // if (!this.image.base64URL) return
         this.getPreviewHTML((err, faceHTML) => {
             if (err) callback(err)
             callback(null, `
