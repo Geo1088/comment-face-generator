@@ -1,6 +1,7 @@
 // Packages
 const {dialog, BrowserWindow} = require('electron').remote
 const fs = require('fs')
+const path = require('path')
 window.$ = window.jQuery = require('jquery')
 // Classes
 const Project = require('./Project.js')
@@ -88,7 +89,7 @@ $document.on('change', '.spritesheet-default-height', function () {
 })
 
 $document.on('click', '.add-face', function () {
-    const path = dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
+    const filepath = dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
         title: 'Import a face',
         filters: [
             {name: 'Images', extensions: ['png', 'jpg', 'jpeg']}
@@ -98,11 +99,11 @@ $document.on('click', '.add-face', function () {
 
     const spritesheet = getSelectedSpritesheet()
     const face = spritesheet.createFace({
-        name: 'yes',
+        name: path.basename(filepath).replace(/\.[^\.]*$/, '').replace(/\s/g, '_'),
         width: 100,
         height: 100,
         image: {
-            path: path
+            path: filepath
         }
     })
 

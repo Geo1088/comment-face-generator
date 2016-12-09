@@ -35,6 +35,16 @@ class Face {
     //     return this.width
     // }
 
+    get displayWidth () {
+        if (this.width === this.USE_DEFAULT) return ''
+        return this.width
+    }
+
+    get displayHeight () {
+        if (this.height === this.USE_DEFAULT) return ''
+        return this.height
+    }
+
     get bgX () {
         return 0 // TODO
     }
@@ -52,11 +62,18 @@ class Face {
     get previewHTML () {
         if (!this.image.base64URL) return
         return `
-        <div class="face">
-            <div class="face-preview-wrap">
-                <img class="face-preview" src="${this.image.base64URL}">
+            <div class="face">
+                <div class="face-preview-wrap">
+                    <img class="face-preview" src="${this.image.base64URL}">
+                </div>
+                <div class="face-actions">
+                    <pre><code>${this.name}</code></pre>
+                    <input class="face-width" type="number" value="${this.displayWidth}">
+                    x
+                    <input class="face-height" type="number" value="${this.displayHeight}">
+                </div>
             </div>
-            <`
+        `
     }
 }
 
