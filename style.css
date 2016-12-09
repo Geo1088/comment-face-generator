@@ -147,7 +147,7 @@ input, button {
     overflow-y: scroll;
 }
 .faces-and-previews .tab {
-    margin: 5px;
+    margin: 10px;
 }
 .tab:not(.active) {
     display: none;
@@ -184,6 +184,9 @@ input, button {
         -1px 1px #000,
         0 1px #000;*/
     display: flex;
+    background: #EEE;
+    border: 1px solid #DDD;
+    margin-bottom: 10px;
 }
 .face-preview-wrap {
     display: flex;
@@ -192,6 +195,7 @@ input, button {
     width: 200px;
     max-height: 200px;
     margin-right: 5px;
+    border-right: 1px solid #DDD;
 }
 .face-preview {
     max-width: 100%;
