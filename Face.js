@@ -88,7 +88,7 @@ class Face {
             let width = this.computedWidth > 200 ? ' width="200"' : ''
             let height = this.computedHeight > 200 ? ' height="200"' : ''
             if (width && height) {
-                if (this.width > this.height)
+                if (this.computedWidth > this.computedHeight)
                     height = ''
                 else
                     width = ''
@@ -110,10 +110,13 @@ class Face {
                 <div class="face">
                     ${faceHTML}
                     <div class="face-actions">
-                        <pre><code>${this.name}</code></pre>
+                        <code>${this.name}</code>
+                        <br>
                         <input class="face-width" type="number" placeholder="${this.spritesheet.defaultWidth}" value="${this.displayWidth}">
                         x
                         <input class="face-height" type="number" placeholder="${this.spritesheet.defaultHeight}" value="${this.displayHeight}">
+                        <br>
+                        <button class="delete-face">Delete face</button>
                     </div>
                 </div>
             `)

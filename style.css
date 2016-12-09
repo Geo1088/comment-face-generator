@@ -30,6 +30,7 @@ input, button {
     display: flex;
     flex-direction: column;
     -webkit-user-select: none;
+    cursor: default;
 }
 
 .header {
@@ -82,6 +83,7 @@ input, button {
     display: flex;
     flex-direction: column;
     -webkit-user-select: none;
+    cursor: default;
 }
 
 /********************/

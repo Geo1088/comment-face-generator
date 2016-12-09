@@ -134,7 +134,10 @@ $document.on('click', '.add-face', function () {
     })
 })
 $document.on('click', '.delete-face', function () {
-    // TODO
+    const $face = $(this).closest('.face')
+    $face.remove()
+    getSelectedSpritesheet().faces.splice($face.index(), 1)
+    // $face.remove()
 })
 $document.on('change', '.face-width', function () {
     const $this = $(this)
@@ -155,7 +158,6 @@ $document.on('change', '.face-width', function () {
         $face.prepend($(html))
     })
 })
-
 $document.on('change', '.face-height', function () {
     const $this = $(this)
     const $face = $this.closest('.face')
