@@ -39,6 +39,14 @@ function selectSpritesheet (data) {
     $('.spritesheet-title').val(spritesheet.name)
     $('.spritesheet-default-width').val(spritesheet.defaultWidth)
     $('.spritesheet-default-height').val(spritesheet.defaultHeight)
+
+    // We also need to re-create the face list now
+    $('.face').remove()
+    for (let face of spritesheet.faces) {
+        face.getFullHTML((err, html) => {
+            $('.faces').append($(html))
+        })
+    }
 }
 function createSpritesheet (data) {
     if (!data) data = {
