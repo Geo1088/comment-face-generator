@@ -31,6 +31,11 @@ function selectSpritesheet (data) {
 
     // Update spritesheet option
     const spritesheet = getSelectedSpritesheet()
+    // Disable actions if all spritesheets are ded
+    if (!spritesheet)
+        return $('.spritesheet-actions input, .spritesheet-actions button').attr('disabled', true)
+    // Otherwise, update the things
+    $('.spritesheet-actions input, .spritesheet-actions button').attr('disabled', false)
     $('.spritesheet-title').val(spritesheet.name)
     $('.spritesheet-default-width').val(spritesheet.defaultWidth)
     $('.spritesheet-default-height').val(spritesheet.defaultHeight)
@@ -56,6 +61,7 @@ function deleteSpritesheet (data) {
 // Events - spritesheet controls
 $document.on('click', '.create-spritesheet', function () {
     createSpritesheet()
+    $('.spritesheet-actions input, .spritesheet-actions button').attr('disabled', false)
 })
 $(window).on('load', function () {
     createSpritesheet()
