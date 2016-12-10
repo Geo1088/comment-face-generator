@@ -106,32 +106,38 @@ $document.on('change', '.spritesheet-default-height', function () {
 // Events - face controls
 $document.on('click', '.add-face', function () {
     // Get an image path from the user, and load it
-    let filepath = dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
-        title: 'Import a face',
+    let filepaths = dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
+        title: 'Import face',
+        properties: [
+            'openFile',
+            'multiSelections'
+        ],
         filters: [
             {name: 'Images', extensions: ['png', 'jpg', 'jpeg']}
         ]
     })
-    if (!filepath) return // showOpenDialog returns undefined on cancel
-    filepath = filepath[0] // and returns an array all the other times
+    if (!filepaths) return // showOpenDialog returns undefined on cancel
 
-    // Create a new face object and add it to the current spritesheet
-    const spritesheet = getSelectedSpritesheet()
-    const face = spritesheet.createFace({
-        name: path
-            .basename(filepath)
-            .replace(/\.[^\.]*$/, '')
-            .replace(/\s/g, '_'),
-        width: spritesheet.defaultWidth,
-        height: spritesheet.defaultHeight,
-        image: {
-            path: filepath
-        }
-    })
+    // Loop through each file added
+    for (let filepath of filepaths) {
+        // Create a new face object and add it to the current spritesheet
+        const spritesheet = getSelectedSpritesheet()
+        const face = spritesheet.createFace({
+            name: path
+                .basename(filepath)
+                .replace(/\.[^\.]*$/, '')
+                .replace(/\s/g, '_'),
+            width: spritesheet.defaultWidth,
+            height: spritesheet.defaultHeight,
+            image: {
+                path: filepath
+            }
+        })
 
-    face.getFullHTML((err, html) => {
-        $('.faces').append($(html))
-    })
+        face.getFullHTML((err, html) => {
+            $('.faces').append($(html))
+        })
+    }
 })
 $document.on('click', '.delete-face', function () {
     const $face = $(this).closest('.face')
