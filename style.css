@@ -203,3 +203,28 @@ input, button {
     max-width: 100%;
     max-height: 100%;
 }
+.face-actions input[type="number"] {
+    width: 40px;
+}
+
+.faces:empty {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.faces:empty::before {
+    content: "This spritesheet has no faces!";
+    font-weight: bold;
+    font-size: 18px;
+    font-family: 'Asap', 'Trebuchet MS', sans-serif;
+    margin: 0 10px 5px;
+    text-align: center;
+}
+.faces:empty::after {
+    content: "Add some with the \"Add face\" button.";
+    margin: 0 10px;
+    text-align: center;
+}
