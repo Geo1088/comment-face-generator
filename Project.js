@@ -28,8 +28,8 @@ class Project {
         this.spritesheets.splice(index, 1)
     }
 
-    get CSS () {
-        // TODO TODO TODO
+    get fullCSS () {
+        return this.spritesheets.map(spritesheet => spritesheet.fullCSS).join('\n\n')
     }
 }
 

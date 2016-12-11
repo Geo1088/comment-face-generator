@@ -152,7 +152,7 @@ input, button {
     margin: 10px;
 }
 .tab:not(.active) {
-    display: none;
+    display: none !important; /* important because other tabs try to override this */
 }
 .tabbed .tab-buttons {
     position: absolute;

@@ -31,14 +31,13 @@ class Spritesheet {
         return `<li class="spritesheet">${this.name}</li>`
     }
 
-    get CSS () {
-        let css = this.faces.map(f => f.fullCSS).join('\n') + `\n
+    get fullCSS () {
+        return this.faces.map(f => f.fullCSS).join('\n') + `\n
 ${this.faces.map(f => f.selector).join(',')}{
 \tbackground-image: url(%%${this.name}%%);
 \twidth: ${this.defaultWidth}px;
 \theight: ${this.defaultHeight}px;
 }`
-        return css
     }
 
     clickHandler () {

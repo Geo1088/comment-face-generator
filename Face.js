@@ -21,10 +21,6 @@ class Face {
         this.useNativeRes = true
     }
 
-    get selector () {
-        return `.md [href="#${this.name}"]`
-    }
-
     // get width () {
     //     if (this.width === this.USE_DEFAULT) return this.spritesheet ? this.spritesheet.defaultWidth
     //     return this.width
@@ -60,10 +56,18 @@ class Face {
         return height
     }
 
+    get selector () {
+        return `.md [href="#${this.name}"]`
+    }
+
     get fullCSS () {
-        const widthPart = (this.width === this.USE_DEFAULT ? '' : `; width:${this.width}px`)
-        const heightPart = (this.height === this.USE_DEFAULT ? '' : `; height:${this.height}px`)
-        return `${this.selector}{background:${this.bgX} ${this.bgY}${widthPart}${heightPart}}`
+        let width = '', height = ''
+        if (this.computedWidth !== this.spritesheet.defaultWidth)
+            width = `; width:${this.width}px`
+        if (this.computedHeight !== this.spritesheet.defauhtHeight)
+            height = `; height:${this.height}px`
+
+        return `${this.selector}{background:${this.bgX} ${this.bgY}${width}${height}}`
     }
 
     sizedPreviewImageURL (callback) {

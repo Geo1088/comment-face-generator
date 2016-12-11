@@ -66,6 +66,16 @@ function deleteSpritesheet (data) {
 }
 
 
+// Events - tab menu and tab updates
+$document.on('click', '.tab-buttons button', function () {
+    $('.tab').toggleClass('active', false)
+    $(`.tab.${$(this).attr('data-for')}`).toggleClass('active', true)
+})
+$document.on('click', '.tab-buttons [data-for="preview-css"]', function () {
+    // Update the CSS view with the current CSS
+    $('.preview-css').html(project.fullCSS)
+})
+
 // Events - spritesheet controls
 $document.on('click', '.create-spritesheet', function () {
     createSpritesheet()
@@ -137,8 +147,7 @@ $document.on('click', '.add-face', function () {
         // Create a new face object and add it to the current spritesheet
         const spritesheet = getSelectedSpritesheet()
         const face = spritesheet.createFace({
-            name: path
-                .basename(filepath)
+            name: path.basename(filepath)
                 .replace(/\.[^\.]*$/, '')
                 .replace(/\s/g, '_'),
             width: spritesheet.defaultWidth,
