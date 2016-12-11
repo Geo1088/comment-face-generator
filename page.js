@@ -9,6 +9,7 @@ const Spritesheet = require('./Spritesheet.js')
 const Face = require('./Face.js')
 const Image = require('./Image.js')
 
+
 // Initialization
 const project = new Project() // The current project - one per window
 const $document = $(document)
