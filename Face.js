@@ -37,11 +37,19 @@ class Face {
     }
 
     get bgX () {
-        return 0 // TODO
+        return 0 // This is actually constant
     }
 
     get bgY () {
-        return 0 // TODO
+        // Loop through the faces before this one in the array, and add their
+        // heights together
+        let offsetY = 0
+        for (let i = 0; i < this.spritesheet.faces.indexOf(this); i++) {
+            console.log('Adding spritesheet item', i+1)
+            offsetY += this.spritesheet.faces[i].computedHeight
+            console.log(offsetY)
+        }
+        return offsetY
     }
 
     get computedWidth () {
@@ -63,11 +71,14 @@ class Face {
     get fullCSS () {
         let width = '', height = ''
         if (this.computedWidth !== this.spritesheet.defaultWidth)
-            width = `; width:${this.width}px`
+            width = `;width:${this.width}px!important`
         if (this.computedHeight !== this.spritesheet.defaultHeight)
-            height = `; height:${this.height}px`
+            height = `;height:${this.height}px!important`
 
-        return `${this.selector}{background:${this.bgX} ${this.bgY}${width}${height}}`
+        const bgX = this.bgX ? '0' : `-${this.bgX}px`
+        const bgY = this.bgX ? '0' : `-${this.bgY}px`
+
+        return `${this.selector}{background:${bgX} ${bgY}${width}${height}}`
     }
 
     sizedImage (callback) {

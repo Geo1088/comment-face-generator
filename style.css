@@ -241,5 +241,6 @@ input, button {
 
 .preview-spritesheets {
     flex: 0 1 50%;
-    background: red;
+    height: 100%;
+    overflow-y: scroll;
 }

@@ -67,8 +67,8 @@ ${this.faces.map(f => f.selector).join(',')}{
                 if (index >= faces.length) return callback(null, spritesheetImage)
                 // Get the image data
                 faces[index].sizedImage((err, faceImage) => {
-                    if (err) callback(err)
                     console.log('Placing image on spritesheet at height', traversedHeight)
+                    if (err) callback(err)
                     // Blit the image
                     spritesheetImage.blit(faceImage, 0, traversedHeight)
                     // Bump vars and move to next image

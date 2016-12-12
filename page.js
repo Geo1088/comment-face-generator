@@ -1,18 +1,16 @@
 // Packages
 const {dialog, BrowserWindow} = require('electron').remote
-const fs = require('fs')
 const path = require('path')
+const jimp = require('jimp')
 window.$ = window.jQuery = require('jquery')
 // Classes
 const Project = require('./Project.js')
-const Spritesheet = require('./Spritesheet.js')
-const Face = require('./Face.js')
-const Image = require('./Image.js')
 
 
 // Initialization
 const project = new Project() // The current project - one per window
 const $document = $(document)
+let currentImageData
 
 
 // Utilities
@@ -75,6 +73,18 @@ $document.on('click', '.tab-buttons button', function () {
 $document.on('click', '.tab-buttons [data-for="preview-output"]', function () {
     // Update the output view with the current CSS and spritesheet
     $('.preview-css').html(project.fullCSS)
+    getSelectedSpritesheet().generateSpritesheet((err, image) => {
+        if (err) return console.log('Spritesheet generation failed.\n', err)
+        // Store the image so we can get it again later
+        currentImageData = image
+        // Get the base64 URL and display the preview
+        image.getBase64(jimp.AUTO, (err, url) => {
+            if (err) return console.log('Oh crap.\n', err)
+            $('.preview-spritesheets').html(`
+                <img src="${url}" alt="Spritesheet preview" class="final-spritesheet">
+            `)
+        })
+    })
 })
 
 // Events - spritesheet controls
@@ -91,6 +101,21 @@ $document.on('click', '.delete-spritesheet', function () {
     deleteSpritesheet(index)
     if (index > 0) index--
     selectSpritesheet(index)
+})
+$document.on('click', '.save-spritesheet', function () {
+    if (!currentImageData) return
+    const path = dialog.showSaveDialog(BrowserWindow.getFocusedWindow(), {
+        title: 'Save spritesheet',
+        defaultPath: `${getSelectedSpritesheet().name}.png`,
+        filters: [
+            {name: 'Images', extensions: ['png']}
+        ]
+    })
+    if (!path) return
+    currentImageData.write(path, (err) => {
+        if (err) throw err
+        console.log('Saved hopefully.')
+    })
 })
 
 $document.on('click', '.spritesheet', function () {
