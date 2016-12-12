@@ -70,7 +70,7 @@ class Face {
         return `${this.selector}{background:${this.bgX} ${this.bgY}${width}${height}}`
     }
 
-    sizedPreviewImageURL (callback) {
+    sizedImage (callback) {
         this.image.jimp((err, image) => {
             if (err) callback(err)
             if (this.useNativeRes) {
@@ -78,6 +78,13 @@ class Face {
                 this.width = image.bitmap.width
                 this.height = image.bitmap.height
             }
+            image
+                .cover(this.computedWidth, this.computedHeight, callback)
+        })
+    }
+
+    sizedPreviewImageURL (callback) {
+        this.sizedImage((err, image) => {
             image
                 .cover(this.computedWidth, this.computedHeight)
                 .getBase64(jimp.AUTO, callback)
