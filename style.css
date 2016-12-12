@@ -146,10 +146,7 @@ input, button {
 
 .faces-and-previews {
     flex: 0 1 100%;
-    overflow-y: scroll;
-}
-.faces-and-previews .tab {
-    margin: 10px;
+    height: calc(100% - 33px);
 }
 .tab:not(.active) {
     display: none !important; /* important because other tabs try to override this */
@@ -160,18 +157,14 @@ input, button {
     bottom: 0;
     padding: 5px;
 }
-.preview-css {
-    font-family: 'Source Code Pro', monospace;
-    white-space: pre-wrap;
-    -webkit-user-select: all;
-}
-.preview-raw-data {
-    font-family: 'Source Code Pro', monospace;
-    -webkit-user-select: all;
-}
 
-/* Faces */
+/* Faces tab */
 
+.faces {
+    padding: 10px;
+    height: 100%;
+    overflow-y: scroll;
+}
 .face {
     -webkit-user-select: initial;
     /*font-family: 'Verdana', sans-serif;
@@ -227,4 +220,26 @@ input, button {
     content: "Add some with the \"Add face\" button.";
     margin: 0 10px;
     text-align: center;
+}
+
+/* Output tab */
+.preview-output {
+    display: flex;
+    height: 100%;
+}
+
+.preview-css {
+    margin: 0;
+    padding: 5px;
+    flex: 0 1 50%;
+    height: 100%;
+    overflow-y: scroll;
+    font-family: 'Source Code Pro', monospace;
+    white-space: pre-wrap;
+    -webkit-user-select: all;
+}
+
+.preview-spritesheets {
+    flex: 0 1 50%;
+    background: red;
 }

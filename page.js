@@ -72,8 +72,8 @@ $document.on('click', '.tab-buttons button', function () {
     $('.tab').toggleClass('active', false)
     $(`.tab.${$(this).attr('data-for')}`).toggleClass('active', true)
 })
-$document.on('click', '.tab-buttons [data-for="preview-css"]', function () {
-    // Update the CSS view with the current CSS
+$document.on('click', '.tab-buttons [data-for="preview-output"]', function () {
+    // Update the output view with the current CSS and spritesheet
     $('.preview-css').html(project.fullCSS)
 })
 
