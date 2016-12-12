@@ -64,7 +64,7 @@ class Face {
         let width = '', height = ''
         if (this.computedWidth !== this.spritesheet.defaultWidth)
             width = `; width:${this.width}px`
-        if (this.computedHeight !== this.spritesheet.defauhtHeight)
+        if (this.computedHeight !== this.spritesheet.defaultHeight)
             height = `; height:${this.height}px`
 
         return `${this.selector}{background:${this.bgX} ${this.bgY}${width}${height}}`
