@@ -10,7 +10,7 @@ body {
     font-family: 'Open Sans', sans-serif;
 }
 
-input, button {
+input[type="text"], input[type="number"], button {
     height: 22px;
     font-family: inherit;
 }
@@ -68,9 +68,18 @@ input, button {
 .project-settings-header {
     border-top: 1px solid #BBB;
 }
+.project-settings-header .project-settings-collapse::after {
+    content: '^'
+}
+.project-settings-header.show .project-settings-collapse::after {
+    content: 'v'
+}
 .project-settings-view {
     border-top: 1px solid #BBB;
     padding: 5px;
+}
+.project-settings-header:not(.show) + .project-settings-view {
+    display: none;
 }
 
 /********************/

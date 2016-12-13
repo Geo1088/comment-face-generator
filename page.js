@@ -232,3 +232,8 @@ $document.on('change', '.face-height', function () {
         $face.prepend($(html))
     })
 })
+
+// Events - settings
+$document.on('click', '.project-settings-collapse', function () {
+    $('.project-settings-header').toggleClass('show')
+})
