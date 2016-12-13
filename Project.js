@@ -31,6 +31,13 @@ class Project {
     get fullCSS () {
         return this.spritesheets.map(spritesheet => spritesheet.fullCSS).join('\n\n')
     }
+
+    get object () {
+        return {
+            options: {},
+            spritesheets: this.spritesheets.map(spritesheet => spritesheet.object),
+        }
+    }
 }
 
 module.exports = Project

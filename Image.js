@@ -3,12 +3,15 @@ const jimp = require('jimp')
 
 class Image {
     constructor (object) {
-        if (object.path) {
-            this.path = object.path
-            this.buffer = Buffer.from(fs.readFileSync(this.path))
-        } else if (object.buffer) {
+        if (object.buffer) {
             this.path = ''
             this.buffer = object.buffer
+        } else if (object.bufferBase64) {
+            this.path = ''
+            this.buffer = Buffer.from(object.bufferBase64, 'base64')
+        } else if (object.path) {
+            this.path = object.path
+            this.buffer = Buffer.from(fs.readFileSync(this.path))
         } else if (typeof object === 'string') {
             this.path = object
             this.buffer = Buffer.from(fs.readFileSync(this.path))
@@ -26,7 +29,7 @@ class Image {
         return jimp.read(this.buffer, callback)
     }
 
-    get asObject () {
+    get object () {
         return {
             path: this.path,
             buffer: this.buffer

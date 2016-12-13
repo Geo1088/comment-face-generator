@@ -114,6 +114,15 @@ class Face {
             `)
         })
     }
+
+    get object () {
+        return {
+            name: this.name,
+            image: this.image.object,
+            width: this.width,
+            height: this.height
+        }
+    }
 }
 
 module.exports = Face

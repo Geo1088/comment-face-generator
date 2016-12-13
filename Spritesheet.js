@@ -84,6 +84,15 @@ ${this.faces.map(f => f.selector).join(',')}{
     // project.spritesheets[0].generateSpritesheet((err, image) => {
     //     image.write('test.png')
     // })
+
+    get object () {
+        return {
+            name: this.name,
+            defaultWidth: this.defaultWidth,
+            defaultHeight: this.defaultHeight,
+            faces: this.faces.map(face => face.object)
+        }
+    }
 }
 
 module.exports = Spritesheet
