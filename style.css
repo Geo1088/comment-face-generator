@@ -30,6 +30,7 @@ input, button {
     display: flex;
     flex-direction: column;
     -webkit-user-select: none;
+    cursor: default;
 }
 
 .header {
@@ -47,20 +48,20 @@ input, button {
     margin: 0;
 }
 
-.sheets-header {
+.spritesheets-header {
     border-bottom: 1px solid #BBB;
 }
-.sheets-list {
+.spritesheets-list {
     margin: 0;
     padding: 0;
     flex: 0 1 100%;
     overflow-y: scroll;
 }
-.sheets-list .spritesheet {
+.spritesheets-list .spritesheet {
     padding: 5px;
     cursor: pointer;
 }
-.sheets-list .spritesheet.active {
+.spritesheets-list .spritesheet.active {
     background: #DDD;
 }
 
@@ -82,6 +83,7 @@ input, button {
     display: flex;
     flex-direction: column;
     -webkit-user-select: none;
+    cursor: default;
 }
 
 /********************/
@@ -144,13 +146,10 @@ input, button {
 
 .faces-and-previews {
     flex: 0 1 100%;
-    overflow-y: scroll;
-}
-.faces-and-previews .tab {
-    margin: 5px;
+    height: calc(100% - 33px);
 }
 .tab:not(.active) {
-    display: none;
+    display: none !important; /* important because other tabs try to override this */
 }
 .tabbed .tab-buttons {
     position: absolute;
@@ -158,20 +157,16 @@ input, button {
     bottom: 0;
     padding: 5px;
 }
-.preview-css {
-    font-family: 'Source Code Pro', monospace;
-    white-space: pre-wrap;
-    -webkit-user-select: all;
-}
-.preview-raw-data {
-    font-family: 'Source Code Pro', monospace;
-    -webkit-user-select: all;
-}
 
-/* Faces */
+/* Faces tab */
 
+.faces {
+    padding: 10px;
+    height: 100%;
+    overflow-y: scroll;
+}
 .face {
-    -webkit-user-select: normal;
+    -webkit-user-select: initial;
     /*font-family: 'Verdana', sans-serif;
     color: #FFF;
     text-shadow:
@@ -184,16 +179,68 @@ input, button {
         -1px 1px #000,
         0 1px #000;*/
     display: flex;
+    background: #EEE;
+    border: 1px solid #DDD;
+    margin-bottom: 10px;
 }
 .face-preview-wrap {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 200px;
-    height: 200px;
+    max-height: 200px;
     margin-right: 5px;
+    border-right: 1px solid #DDD;
 }
 .face-preview {
     max-width: 100%;
     max-height: 100%;
+}
+.face-actions input[type="number"] {
+    width: 40px;
+}
+
+.faces:empty {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.faces:empty::before {
+    content: "This spritesheet has no faces!";
+    font-weight: bold;
+    font-size: 18px;
+    font-family: 'Asap', 'Trebuchet MS', sans-serif;
+    margin: 0 10px 5px;
+    text-align: center;
+}
+.faces:empty::after {
+    content: "Add some with the \"Add face\" button.";
+    margin: 0 10px;
+    text-align: center;
+}
+
+/* Output tab */
+.preview-output {
+    display: flex;
+    height: 100%;
+}
+
+.preview-css {
+    margin: 0;
+    padding: 5px;
+    flex: 0 1 50%;
+    height: 100%;
+    overflow-y: scroll;
+    font-family: 'Source Code Pro', monospace;
+    white-space: pre-wrap;
+    -webkit-user-select: all;
+}
+
+.preview-spritesheets {
+    flex: 0 1 50%;
+    height: 100%;
+    overflow-y: scroll;
 }

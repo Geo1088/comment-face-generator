@@ -1,315 +1,234 @@
-window.$ = window.jQuery = require('jquery')
-const fs = require('fs')
-const jimp = require('jimp')
+// Packages
 const {dialog, BrowserWindow} = require('electron').remote
-let createdSpritesheets = 0 // Used for the naming of newly creates spritesheets
+const path = require('path')
+const jimp = require('jimp')
+window.$ = window.jQuery = require('jquery')
+// Classes
+const Project = require('./Project.js')
 
-/****************************/
-/* CSS generation functions */
-/****************************/
 
-function cssFromSpritesheet (spritesheet) {
-    if (spritesheet.faces == null || spritesheet.faces.length < 1) return '/* No faces in the spritesheet */'
-    if (spritesheet.defaults.width == null || spritesheet.defaults.height == null) return '/* Default dimensions not set */'
+// Initialization
+const project = new Project() // The current project - one per window
+const $document = $(document)
+let currentImageData
 
-    let rules = '' // Stores the rules for each individual face
 
-    spritesheet.faces.forEach(face => {
-        if (face.bgX == null || face.bgY == null) return console.log('Error doing thing with face: no bgX or bgY\n', face)
-
-        let width = '', height = ''
-        if (face.width && face.width !== spritesheet.defaults.width)
-            width = `; width:${face.width}px!important`
-        if (face.height && face.height !== spritesheet.defaults.height)
-            height = `; height:${face.height}px!important`
-
-        let rule = `.md [href="${face.name}"]{ background:${face.bgX}${face.bgX === 0 ? '' : 'px'} ${face.bgY}${face.bgY === 0 ? '' : 'px'}${width}${height} }\n`
-        rules += rule
-    })
-
-    // The base rule that applies to all faces in the spritesheet
-    const allFacesRule = `\n${spritesheet.faces.map(face => `.md [href="${face.name}"]`).join(',')} {
-\tbackground-image: url(%%${spritesheet.title}%%);
-${spritesheet.defaults.width != null ? `\twidth: ${spritesheet.defaults.width}px;\n` : ''}${
-spritesheet.defaults.height != null ? `\theight: ${spritesheet.defaults.height}px;\n` : ''}}`
-    const comment = `/* ${spritesheet.title} */\n\n`
-    return comment + rules + allFacesRule
+// Utilities
+function getSelectedSpritesheetIndex () {
+    return $('.spritesheet.active').index()
 }
-
-/***************************************/
-/* Spritesheet data accessor utilities */
-/***************************************/
-
-const spritesheetItem = () => $('.spritesheet.active')
-const spritesheetData = () => spritesheetItem().data('spritesheet')
-
-function setSpritesheet (spritesheetData) {
-    spritesheetItem().data('spritesheet', spritesheetData)
-    updateSheetDisplay()
+function getSelectedSpritesheet () {
+    return project.spritesheets[getSelectedSpritesheetIndex()]
 }
-function selectSpritesheet (index) {
+function getSelectedSpritesheetElement () {
+    return $('.spritesheet.active')
+}
+function selectSpritesheet (data) {
+    const index = (typeof data === 'number' ? data : project.spritesheets.indexOf(data))
     $('.spritesheet').toggleClass('active', false)
-    $($('.spritesheet')[index]).toggleClass('active', true)
-    updateSheetDisplay()
-    updateFaceDisplay()
-}
-function createNewSpritesheet () {
-    // Default spritesheet data
-    const data = {
-        title: `Spritesheet ${++createdSpritesheets}`,
-        faces: [],
-        defaults: {
-            width: 100,
-            height: 100
-        }
-    }
-    // Template for thing
-    const newListItem = $(`<li class="spritesheet active">${data.title}</li>`)
-    // Set everything else to inactive (the new item is set to active in the template)
-    $('.spritesheet').toggleClass('active', false)
-    // Add to the list
-    $('.sheets-list').append(newListItem)
-    // Set the data of this newly-created spritesheet
-    setSpritesheet(data)
-    updateFaceDisplay()
-}
-function deleteSpritesheet () {
-    spritesheetItem().remove()
-    selectSpritesheet(0)
-    // updateSheetDisplay()
-}
+    $('.spritesheet').eq(index).toggleClass('active', true)
 
-function addFaceToSpritesheet (faceData) {
-    let data = spritesheetData()
-    if (!data.faces) data.faces = []
-    data.faces.push(faceData)
-    setSpritesheet(data)
-    updateFaceDisplay()
-}
-function setFaceAtIndex (index, faceData) {
-    let data = spritesheetData()
-    if (!data.faces) data.faces = []
-    data.faces[index] = faceData
-    setSpritesheet(data)
-    updateFaceDisplay()
-}
-function removeFaceFromSpritesheet (faceIndex) {
-    let data = spritesheetData()
-    delete data.faces[faceIndex]
-    setSpritesheet(data)
-    updateFaceDisplay()
-}
+    // Update spritesheet option
+    const spritesheet = getSelectedSpritesheet()
+    // Disable actions if all spritesheets are ded
+    if (!spritesheet)
+        return $('.spritesheet-actions input, .spritesheet-actions button').attr('disabled', true)
+    // Otherwise, update the things
+    $('.spritesheet-actions input, .spritesheet-actions button').attr('disabled', false)
+    $('.spritesheet-title').val(spritesheet.name)
+    $('.spritesheet-default-width').val(spritesheet.defaultWidth)
+    $('.spritesheet-default-height').val(spritesheet.defaultHeight)
 
-/************/
-/* UI Stuff */
-/************/
-
-// Update display of the spritesheet list and per-sheet settings/previews
-function updateSheetDisplay () {
-    const data = spritesheetData()
-
-    // Setting values
-    $('.spritesheet-title').val(data.title)
-    $('.spritesheet-default-width').val(data.defaults.width)
-    $('.spritesheet-default-height').val(data.defaults.height)
-
-    // Spritesheet titles
-    $('.spritesheet').each(function () {
-        let $this = $(this)
-        $this.html($this.data('spritesheet').title)
-    })
-
-    // CSS preview
-    $('.preview-css').html(cssFromSpritesheet(data) || '/* No CSS to display */')
-
-    // Raw data
-    $('.preview-raw-data').html(JSON.stringify(data, null, '\t'))
-}
-
-// Update display of the face list and per-face settings
-function updateFaceDisplay () {
-    const data = spritesheetData()
-
-    // Reconstruct the list of faces
+    // We also need to re-create the face list now
     $('.face').remove()
-    for (let face of data.faces) {
-        const widthIsDefault = face.width == null
-        const heightIsDefault = face.height == null
-        const width = (widthIsDefault ? data.defaults.width : face.width)
-        const height = (heightIsDefault ? data.defaults.height : face.height)
-
-        // Get a thumbnail to preview the image
-        let image = jimp.read(Buffer.from(face.image.data, 'base64')).then(image => {
-            const ogWidth = image.bitmap.width
-            const ogHeight = image.bitmap.height
-            const limit = 200
-            let scale
-
-            if (ogWidth > limit || ogHeight > limit) {
-                if (ogWidth > ogHeight)
-                    scale = limit / ogWidth
-                else
-                    scale = limit / ogHeight
-            } else
-                scale = 1
-
-            console.log(scale)
-
-            const width = ogWidth * scale
-            const height = ogHeight * scale
-            image.cover(width, height).getBuffer(jimp.MIME_PNG, (err, buffer) => {
-                constructItem({
-                    data: buffer.toString('base64'),
-                    format: 'png'
-                })
-            })
+    for (let face of spritesheet.faces) {
+        face.getFullHTML((err, html) => {
+            $('.faces').append($(html))
         })
-
-        function constructItem (imageData) {
-            // Face item template - with bolded values that are non-default
-            let faceItem = $(`<div class="face">
-                <div class="face-preview-wrap">
-                    <img class="face-preview" src="data:image/${imageData.format};base64,${imageData.data}">
-                </div>
-                <div class="face-edit">
-                    <pre>[](#${face.name})</pre>
-                    <div>(${
-                        widthIsDefault ? width : `<strong>${width}</strong>`
-                    } x ${
-                        heightIsDefault ? height : `<strong>${height}</strong>`
-                    })</div>
-                    <input class="face-width" type="number" placeholder="${data.defaults.width}" value="${widthIsDefault ? '' : width}">
-                    <input class="face-height" type="number" placeholder="${data.defaults.height}" value="${heightIsDefault ? '' : height}">
-                </div>
-            </div>`)
-
-            // Add to actual list
-            $('.tab.faces').append(faceItem)
-
-            // Other styles that need to be added per-face
-            // faceItem
-            //     .css('width', width)
-            //     .css('height', height)
-            //     .css('background-image', face.image ? `url(data:image/${face.image.format};base64,${face.image.data || ''})` : '')
-        }
     }
 }
+function createSpritesheet (data) {
+    if (!data) data = {
+        name: `Sheet${project.createdSpritesheets + 1}`,
+        defaultWidth: 100,
+        defaultHeight: 100
+    }
 
-/******************/
-/* Event handlers */
-/******************/
+    const newSheet = project.createSpritesheet(data)
+    $('.spritesheets-list').append($(newSheet.listItem))
+    selectSpritesheet(newSheet)
+}
+function deleteSpritesheet (data) {
+    const index = (typeof data === 'number' ? data : project.spritesheets.indexOf(data))
+    project.spritesheets.splice(index, 1)
+    $('.spritesheet').eq(index).remove()
+}
 
 
-// Spritesheet creation - one on window load, and one per click of the button
-$(window).on('load', createNewSpritesheet)
-$(document).on('click', '.create-spritesheet', createNewSpritesheet)
-// Select a spritesheet when it's clicked
-$(document).on('click', '.spritesheet', function () {
+// Events - tab menu and tab updates
+$document.on('click', '.tab-buttons button', function () {
+    $('.tab').toggleClass('active', false)
+    $(`.tab.${$(this).attr('data-for')}`).toggleClass('active', true)
+})
+$document.on('click', '.tab-buttons [data-for="preview-output"]', function () {
+    // Update the output view with the current CSS and spritesheet
+    $('.preview-css').html(project.fullCSS)
+    getSelectedSpritesheet().generateSpritesheet((err, image) => {
+        if (err) return console.log('Spritesheet generation failed.\n', err)
+        // Store the image so we can get it again later
+        currentImageData = image
+        // Get the base64 URL and display the preview
+        image.getBase64(jimp.AUTO, (err, url) => {
+            if (err) return console.log('Oh crap.\n', err)
+            $('.preview-spritesheets').html(`
+                <img src="${url}" alt="Spritesheet preview" class="final-spritesheet">
+            `)
+        })
+    })
+})
+
+// Events - spritesheet controls
+$document.on('click', '.create-spritesheet', function () {
+    createSpritesheet()
+    $('.spritesheet-actions input, .spritesheet-actions button').attr('disabled', false)
+})
+$(window).on('load', function () {
+    createSpritesheet()
+})
+
+$document.on('click', '.delete-spritesheet', function () {
+    let index = getSelectedSpritesheetIndex()
+    deleteSpritesheet(index)
+    if (index > 0) index--
+    selectSpritesheet(index)
+})
+$document.on('click', '.save-spritesheet', function () {
+    if (!currentImageData) return
+    const path = dialog.showSaveDialog(BrowserWindow.getFocusedWindow(), {
+        title: 'Save spritesheet',
+        defaultPath: `${getSelectedSpritesheet().name}.png`,
+        filters: [
+            {name: 'Images', extensions: ['png']}
+        ]
+    })
+    if (!path) return
+    currentImageData.write(path, (err) => {
+        if (err) throw err
+        console.log('Saved hopefully.')
+    })
+})
+
+$document.on('click', '.spritesheet', function () {
     selectSpritesheet($(this).index())
 })
-// Update spritesheet title as the text box is updated
-$(document).on('change', '.spritesheet-title', function () {
-    let data = spritesheetData()
-    data.title = $(this).val()
-    setSpritesheet(data)
+
+$document.on('change', '.spritesheet-title', function () {
+    const spritesheet = getSelectedSpritesheet()
+    spritesheet.name = $(this).val()
+    $('.spritesheet.active').html(spritesheet.name)
 })
-// Same for default width and height boxes
-$(document).on('change', '.spritesheet-default-width', function () {
-    let data = spritesheetData()
-    const $this = $(this)
-    const val = $(this).val()
-    console.log(val)
+$document.on('change', '.spritesheet-default-width', function () {
+    const spritesheet = getSelectedSpritesheet()
+    const val = Math.max(parseInt($(this).val()), 0)
+    spritesheet.defaultWidth = val
 
-    if (val === '') {
-        $this.val(data.defaults.width)
-        return
-    }
-    if (!data.defaults) data.defaults = {}
+    // Update placeholders on existing faces
+    $('.face-width').attr('placeholder', val)
 
-    data.defaults.width = parseInt(val, 10)
-    setSpritesheet(data)
-})
-$(document).on('change', '.spritesheet-default-height', function () {
-    let data = spritesheetData()
-    const $this = $(this)
-    const val = $(this).val()
-
-    if (val === '') {
-        $this.val(data.defaults.height)
-        return
-    }
-    if (!data.defaults) data.defaults = {}
-
-    data.defaults.height = (val === '' ? null : parseInt(val, 10))
-    setSpritesheet(data)
-})
-// Switch views when clicking tab buttons
-$(document).on('click', '.tab-buttons button', function () {
-    const $this = $(this)
-    $('.tab').toggleClass('active', false)
-    $(`.tab.${$this.attr('data-for')}`).toggleClass('active', true)
-})
-
-
-
-
-
-
-
-
-// Things for faces
-$(document).on('change', '.face-width', function () {
-    const $this = $(this)
-    const index = $this.closest('.face').index()
-    const val = $this.val()
-    let faceData = spritesheetData().faces[index]
-
-    if (val === '') {
-        $this.val(faceData.width)
-        return
-    }
-
-    faceData.width = (val === '' ? null : parseInt(val, 10))
-    setFaceAtIndex(index, faceData)
-})
-$(document).on('change', '.face-height', function () {
-    const $this = $(this)
-    const index = $this.closest('.face').index()
-    const val = $this.val()
-    let faceData = spritesheetData().faces[index]
-
-    if (val === '') {
-        $this.val(faceData.height)
-        return
-    }
-
-    faceData.height = (val === '' ? null : parseInt(val, 10))
-    setFaceAtIndex(index, faceData)
-})
-
-///// debugging shit /////
-
-$(document).on('click', '.test-add-face-button', function () {
-    addFaceToSpritesheet({
-        name: 'asdf',
-        bgX: 235,
-        bgY: 914,
-        width: 200,
-        height: 300,
-        image: getImageFromDialog()
+    // Loop through all the faces and update the ones that need updating
+    $('.face').each(function (index) {
+        const $this = $(this)
+        if ($this.find('.face-width[value=""]')) {
+            spritesheet.faces[index].getPreviewHTML((err, html) => {
+                $this.children('.face-preview-wrap').remove()
+                $this.prepend($(html))
+            })
+        }
     })
 })
+$document.on('change', '.spritesheet-default-height', function () {
+    const spritesheet = getSelectedSpritesheet()
+    const val = Math.max(parseInt($(this).val()), 0)
+    spritesheet.defaultHeight = val
+    $('.face-height').attr('placeholder', val)
+})
 
-function getImageFromDialog () {
-    const filename = dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
-        title: 'Import a face',
+// Events - face controls
+$document.on('click', '.add-face', function () {
+    // Get an image path from the user, and load it
+    let filepaths = dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
+        title: 'Import face',
+        properties: [
+            'openFile',
+            'multiSelections'
+        ],
         filters: [
             {name: 'Images', extensions: ['png', 'jpg', 'jpeg']}
         ]
-    })[0]
-    if (!filename) return
-    return {
-        data: Buffer.from(fs.readFileSync(filename)).toString('base64'),
-        format: filename.substr(filename.length - 5, filename.length).indexOf('.png') >= 0 ? 'png' : 'jpeg'
+    })
+    if (!filepaths) return // showOpenDialog returns undefined on cancel
+
+    // Loop through each file added
+    for (let filepath of filepaths) {
+        // Create a new face object and add it to the current spritesheet
+        const spritesheet = getSelectedSpritesheet()
+        const face = spritesheet.createFace({
+            name: path.basename(filepath)
+                .replace(/\.[^\.]*$/, '')
+                .replace(/\s/g, '_'),
+            width: spritesheet.defaultWidth,
+            height: spritesheet.defaultHeight,
+            image: {
+                path: filepath
+            }
+        })
+
+        face.getFullHTML((err, html) => {
+            $('.faces').append($(html))
+        })
     }
-}
+})
+$document.on('click', '.delete-face', function () {
+    const $face = $(this).closest('.face')
+    $face.remove()
+    getSelectedSpritesheet().faces.splice($face.index(), 1)
+    // $face.remove()
+})
+$document.on('change', '.face-width', function () {
+    const $this = $(this)
+    const $face = $this.closest('.face')
+
+    // Get the current value, and change it around if necessary
+    let val = parseInt($this.val(), 10)
+    if (isNaN(val)) val = ''
+
+    // Write back to the data object
+    const index = $face.index()
+    const face = getSelectedSpritesheet().faces[index]
+    face.width = val
+
+    // Update the display image with the new dimensions
+    face.getPreviewHTML((err, html) => {
+        $face.children('.face-preview-wrap').remove()
+        $face.prepend($(html))
+    })
+})
+$document.on('change', '.face-height', function () {
+    const $this = $(this)
+    const $face = $this.closest('.face')
+
+    // Get the current value, and change it around if necessary
+    let val = parseInt($this.val(), 10)
+    if (isNaN(val)) val = ''
+
+    // Write back to the data object
+    const index = $face.index()
+    const face = getSelectedSpritesheet().faces[index]
+    face.height = val
+
+    // Update the display image with the new dimensions
+    face.getPreviewHTML((err, html) => {
+        $face.children('.face-preview-wrap').remove()
+        $face.prepend($(html))
+    })
+})

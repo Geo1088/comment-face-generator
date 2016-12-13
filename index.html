@@ -10,11 +10,11 @@
     <body>
 
         <div class="sidebar">
-            <div class="header sheets-header">
+            <div class="header spritesheets-header">
                 <h1>Spritesheets</h1>
                 <button class="create-spritesheet" helptext="Create a new spritesheet">+</button>
             </div>
-            <ul class="sheets-list"></ul>
+            <ul class="spritesheets-list"></ul>
             <div class="header project-settings-header">
                 <h1>Project settings</h1>
             </div>
@@ -22,7 +22,7 @@
                 Soon&trade;
             </div>
         </div>
-        
+
         <div class="main-view">
             <div class="spritesheet-actions">
                 <input class="spritesheet-title "type="text" name="spritesheet-title" value="" placeholder="SheetName">
@@ -33,24 +33,27 @@
                     <span>x</span>
                     <input class="spritesheet-default-height" type="number" name="spritesheet-default-height" value="0">
                 </span>
-                <button class="spritesheet-delete">Delete spritesheet</button>
+                <button class="delete-spritesheet">Delete spritesheet</button>
+                <button class="save-spritesheet">Save Spritesheet</button>
 
                 <div class="right">
-                    <button class="test-add-face-button">Add face</button>
-                    <button class="delete-face-button">Delete face</button>
+                    <button class="add-face">Add face</button>
                     &nbsp;&bull;
                     <div class="tab-buttons">
                         <button data-for="faces">Faces</button>
-                        <button data-for="preview-css">CSS</button>
-                        <button data-for="preview-raw-data">Raw</button>
+                        <button data-for="preview-output">Output</button>
+                        <!-- <button data-for="preview-raw-data">Raw</button> -->
                     </div>
                 </div>
             </div>
 
             <div class="faces-and-previews tabbed">
                 <div class="tab faces active"></div>
-                <pre class="tab preview-css"></pre>
-                <pre class="tab preview-raw-data"></pre>
+                <div class="tab preview-output">
+                    <pre class="preview-css"></pre>
+                    <div class="preview-spritesheets"></div>
+                </div>
+                <!-- <pre class="tab preview-raw-data"></pre> -->
             </div>
         </div>
 
