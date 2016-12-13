@@ -21,21 +21,6 @@ class Face {
         this.useNativeRes = true
     }
 
-    // get width () {
-    //     if (this.width === this.USE_DEFAULT) return this.spritesheet ? this.spritesheet.defaultWidth
-    //     return this.width
-    // }
-
-    get displayWidth () {
-        if (this.width === this.USE_DEFAULT) return ''
-        return this.width
-    }
-
-    get displayHeight () {
-        if (this.height === this.USE_DEFAULT) return ''
-        return this.height
-    }
-
     get bgX () {
         return 0 // This is actually constant
     }
@@ -46,22 +31,10 @@ class Face {
         let offsetY = 0
         for (let i = 0; i < this.spritesheet.faces.indexOf(this); i++) {
             console.log('Adding spritesheet item', i+1)
-            offsetY += this.spritesheet.faces[i].computedHeight
+            offsetY += this.spritesheet.faces[i].height
             console.log(offsetY)
         }
         return offsetY
-    }
-
-    get computedWidth () {
-        let width = this.width
-        if (width === '') width = this.spritesheet.defaultWidth
-        return width
-    }
-
-    get computedHeight () {
-        let height = this.height
-        if (height === '') height = this.spritesheet.defaultHeight
-        return height
     }
 
     get selector () {
@@ -70,9 +43,9 @@ class Face {
 
     get fullCSS () {
         let width = '', height = ''
-        if (this.computedWidth !== this.spritesheet.defaultWidth)
+        if (this.width !== this.spritesheet.defaultWidth)
             width = `;width:${this.width}px!important`
-        if (this.computedHeight !== this.spritesheet.defaultHeight)
+        if (this.height !== this.spritesheet.defaultHeight)
             height = `;height:${this.height}px!important`
 
         const bgX = this.bgX ? '0' : `-${this.bgX}px`
@@ -89,16 +62,13 @@ class Face {
                 this.width = image.bitmap.width
                 this.height = image.bitmap.height
             }
-            image
-                .cover(this.computedWidth, this.computedHeight, callback)
+            image.cover(this.width, this.height, callback)
         })
     }
 
     sizedPreviewImageURL (callback) {
         this.sizedImage((err, image) => {
-            image
-                .cover(this.computedWidth, this.computedHeight)
-                .getBase64(jimp.AUTO, callback)
+            image.getBase64(jimp.AUTO, callback)
         })
     }
 
@@ -107,10 +77,10 @@ class Face {
             if (err) callback(err)
 
             // Set sizing properties to prevent the img from getting too big
-            let width = this.computedWidth > 200 ? ' width="200"' : ''
-            let height = this.computedHeight > 200 ? ' height="200"' : ''
+            let width = this.width > 200 ? ' width="200"' : ''
+            let height = this.height > 200 ? ' height="200"' : ''
             if (width && height) {
-                if (this.computedWidth > this.computedHeight)
+                if (this.width > this.height)
                     height = ''
                 else
                     width = ''
@@ -134,9 +104,9 @@ class Face {
                     <div class="face-actions">
                         <code>${this.name}</code>
                         <br>
-                        <input class="face-width" type="number" placeholder="${this.spritesheet.defaultWidth}" value="${this.displayWidth}">
+                        <input class="face-width" type="number" placeholder="${this.spritesheet.defaultWidth}" value="${this.height}">
                         x
-                        <input class="face-height" type="number" placeholder="${this.spritesheet.defaultHeight}" value="${this.displayHeight}">
+                        <input class="face-height" type="number" placeholder="${this.spritesheet.defaultHeight}" value="${this.height}">
                         <br>
                         <button class="delete-face">Delete face</button>
                     </div>
@@ -145,7 +115,5 @@ class Face {
         })
     }
 }
-
-Face.prototype.USE_DEFAULT = 'USE_DEFAULT'
 
 module.exports = Face

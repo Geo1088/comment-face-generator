@@ -48,8 +48,8 @@ ${this.faces.map(f => f.selector).join(',')}{
         let fullWidth = 0
         let fullHeight = 0
         for (let face of this.faces) {
-            fullWidth = Math.max(face.computedWidth, fullWidth)
-            fullHeight += face.computedHeight
+            fullWidth = Math.max(face.width, fullWidth)
+            fullHeight += face.height
         }
 
         // Now that we know the dimensions, we can create a new image and add

@@ -134,8 +134,17 @@ $document.on('change', '.spritesheet-default-width', function () {
 
     // Update placeholders on existing faces
     $('.face-width').attr('placeholder', val)
+})
+$document.on('change', '.spritesheet-default-height', function () {
+    const spritesheet = getSelectedSpritesheet()
+    const val = Math.max(parseInt($(this).val()), 0)
+    spritesheet.defaultHeight = val
 
-    // Loop through all the faces and update the ones that need updating
+    // Update placeholders on existing faces
+    $('.face-height').attr('placeholder', val)
+})
+function updateAllFacePreviews () {
+    const spritesheet = getSelectedSpritesheet()
     $('.face').each(function (index) {
         const $this = $(this)
         if ($this.find('.face-width[value=""]')) {
@@ -145,12 +154,16 @@ $document.on('change', '.spritesheet-default-width', function () {
             })
         }
     })
-})
-$document.on('change', '.spritesheet-default-height', function () {
+}
+$document.on('click', '.reset-face-dimensions', function () {
     const spritesheet = getSelectedSpritesheet()
-    const val = Math.max(parseInt($(this).val()), 0)
-    spritesheet.defaultHeight = val
-    $('.face-height').attr('placeholder', val)
+    spritesheet.faces.forEach((face, index) => {
+        face.width = spritesheet.defaultWidth
+        face.height = spritesheet.defaultHeight
+        $('.faces').eq(index).find('.face-width').val(spritesheet.defaultWidth)
+        $('.faces').eq(index).find('.face-height').val(spritesheet.defaultHeight)
+    })
+    updateAllFacePreviews()
 })
 
 // Events - face controls
@@ -197,14 +210,14 @@ $document.on('click', '.delete-face', function () {
 $document.on('change', '.face-width', function () {
     const $this = $(this)
     const $face = $this.closest('.face')
+    const index = $face.index()
+    const face = getSelectedSpritesheet().faces[index]
 
     // Get the current value, and change it around if necessary
     let val = parseInt($this.val(), 10)
-    if (isNaN(val)) val = ''
+    if (isNaN(val)) val = face.spritesheet.defaultWidth
 
     // Write back to the data object
-    const index = $face.index()
-    const face = getSelectedSpritesheet().faces[index]
     face.width = val
 
     // Update the display image with the new dimensions
@@ -216,14 +229,14 @@ $document.on('change', '.face-width', function () {
 $document.on('change', '.face-height', function () {
     const $this = $(this)
     const $face = $this.closest('.face')
+    const index = $face.index()
+    const face = getSelectedSpritesheet().faces[index]
 
     // Get the current value, and change it around if necessary
     let val = parseInt($this.val(), 10)
-    if (isNaN(val)) val = ''
+    if (isNaN(val)) val = face.spritesheet.defaultHeight
 
     // Write back to the data object
-    const index = $face.index()
-    const face = getSelectedSpritesheet().faces[index]
     face.height = val
 
     // Update the display image with the new dimensions
