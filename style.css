@@ -76,7 +76,7 @@ input[type="text"], input[type="number"], button {
 }
 .project-settings-view {
     border-top: 1px solid #BBB;
-    padding: 5px;
+    padding: 10px 5px;
 }
 .project-settings-view .button-row {
     display: flex;
