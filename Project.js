@@ -38,7 +38,7 @@ class Project {
 
     get object () {
         return {
-            options: {},
+            settings: this.settings,
             spritesheets: this.spritesheets.map(spritesheet => spritesheet.object),
         }
     }
