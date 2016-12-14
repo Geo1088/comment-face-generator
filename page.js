@@ -20,9 +20,6 @@ function getSelectedSpritesheetIndex () {
 function getSelectedSpritesheet () {
     return project.spritesheets[getSelectedSpritesheetIndex()]
 }
-function getSelectedSpritesheetElement () {
-    return $('.spritesheet.active')
-}
 function selectSpritesheet (data) {
     const index = (typeof data === 'number' ? data : project.spritesheets.indexOf(data))
     $('.spritesheet').toggleClass('active', false)
@@ -249,4 +246,7 @@ $document.on('change', '.face-height', function () {
 // Events - settings
 $document.on('click', '.project-settings-collapse', function () {
     $('.project-settings-header').toggleClass('show')
+})
+$document.on('change', '.use-slashes-setting', function () {
+    project.settings.useSlashes = $(this).is(':checked')
 })

@@ -38,7 +38,7 @@ class Face {
     }
 
     get selector () {
-        return `.md [href="#${this.name}"]`
+        return `.md [href="${this.spritesheet.project.settings.useSlashes ? '/' : '#'}${this.name}"]`
     }
 
     get fullCSS () {

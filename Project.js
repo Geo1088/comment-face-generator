@@ -4,10 +4,14 @@ class Project {
     constructor (options) {
         if (!options) options = {}
         this.name = options.name || 'UntitledProject'
-        this.useSlashes = !!options.useSlashes
+        this.settings = options.settings || {}
 
         this.spritesheets = []
         this.createdSpritesheets = 0
+
+        // Default settings
+        if (this.settings.useSlashes == null)
+            this.settings.useSlashes = false
     }
 
     createSpritesheet (spritesheet) {
