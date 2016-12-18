@@ -144,7 +144,7 @@ input[type="text"], input[type="number"], button {
 }
 .spritesheet-actions .right {
     position: absolute;
-    right: 0;
+    right: 17px;
     padding: 0 5px;
     display: flex;
 }
@@ -171,6 +171,19 @@ input[type="text"], input[type="number"], button {
     right: 17px;
     bottom: 0;
     padding: 5px;
+}
+
+.tab-buttons button {
+    border: 0;
+    margin: -5px 3px;
+    height: 32px;
+    background: transparent;
+    box-shadow: 0 0 0 1px #BBB;
+    outline: none !important;
+}
+.tab-buttons button.active {
+    box-shadow: 0 1px #FFF, 0 0 0 1px #BBB;
+    background: #FFF;
 }
 
 /* Faces tab */

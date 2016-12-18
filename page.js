@@ -64,7 +64,8 @@ function deleteSpritesheet (data) {
 
 // Events - tab menu and tab updates
 $document.on('click', '.tab-buttons button', function () {
-    $('.tab').toggleClass('active', false)
+    $('.tab, .tab-buttons button').toggleClass('active', false)
+    $(this).toggleClass('active', true)
     $(`.tab.${$(this).attr('data-for')}`).toggleClass('active', true)
 })
 $document.on('click', '.tab-buttons [data-for="preview-output"]', function () {
