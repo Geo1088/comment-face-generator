@@ -243,6 +243,25 @@ $document.on('change', '.face-height', function () {
         $face.prepend($(html))
     })
 })
+// Resizing
+$document.on('click', '.set-face-default-dimensions', function () {
+    const $face = $(this).closest('.face')
+    const face = getSelectedSpritesheet().faces[$face.index()]
+
+    // Get the spritesheet's default dimensions and assign them to the face
+    face.width = face.spritesheet.defaultWidth
+    face.height = face.spritesheet.defaultHeight
+
+    // Update the display image with the new dimensions
+    face.getPreviewHTML((err, html) => {
+        $face.children('.face-preview-wrap').remove()
+        $face.prepend($(html))
+    })
+
+    // Update the width and height inputs
+    $face.find('.face-width').val(face.width)
+    $face.find('.face-height').val(face.height)
+})
 
 // Events - settings
 $document.on('click', '.project-settings-collapse', function () {
