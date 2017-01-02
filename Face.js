@@ -104,7 +104,7 @@ class Face {
                     <div class="face-actions">
                         <code>${this.name}</code>
                         <br>
-                        <input class="face-width" type="number" placeholder="${this.spritesheet.defaultWidth}" value="${this.height}">
+                        <input class="face-width" type="number" placeholder="${this.spritesheet.defaultWidth}" value="${this.width}">
                         x
                         <input class="face-height" type="number" placeholder="${this.spritesheet.defaultHeight}" value="${this.height}">
                         <br>
