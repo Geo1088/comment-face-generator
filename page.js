@@ -262,6 +262,22 @@ $document.on('click', '.set-face-default-dimensions', function () {
     $face.find('.face-width').val(face.width)
     $face.find('.face-height').val(face.height)
 })
+$document.on('click', '.set-face-initial-dimensions', function () {
+    const $face = $(this).closest('.face')
+    const face = getSelectedSpritesheet().faces[$face.index()]
+
+    // Regenerate face preview with initial resolution
+    face.useNativeRes = true
+    face.getPreviewHTML((err, html) => {
+        $face.children('.face-preview-wrap').remove()
+        $face.prepend($(html))
+
+        // The width and height properties are updated in this call, so we can
+        // set the input values now
+        $face.find('.face-width').val(face.width)
+        $face.find('.face-height').val(face.height)
+    })
+})
 
 // Events - settings
 $document.on('click', '.project-settings-collapse', function () {
