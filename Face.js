@@ -108,7 +108,7 @@ class Face {
                         x
                         <input class="face-height" type="number" placeholder="${this.spritesheet.defaultHeight}" value="${this.height}">
                         <br>
-                        <button class="set-face-default-dimensions">Set to spritesheetdefault dimensions</button>
+                        <button class="set-face-default-dimensions">Set to spritesheet default dimensions</button>
                         <button class="set-face-initial-dimensions">Set to initial file dimensions</button>
                         <br>
                         <button class="delete-face">Delete face</button>
