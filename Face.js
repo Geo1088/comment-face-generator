@@ -111,6 +111,10 @@ class Face {
                         <button class="set-face-default-dimensions">Set to spritesheet default dimensions</button>
                         <button class="set-face-initial-dimensions">Set to initial file dimensions</button>
                         <br>
+                        Scale to: <input type="number" class="scale-face-value">
+                        <button class="scale-face-to-width">Width</button>
+                        <button class="scale-face-to-height">Height</button>
+                        <br>
                         <button class="delete-face">Delete face</button>
                     </div>
                 </div>

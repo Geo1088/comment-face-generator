@@ -278,6 +278,62 @@ $document.on('click', '.set-face-initial-dimensions', function () {
         $face.find('.face-height').val(face.height)
     })
 })
+$document.on('click', '.scale-face-to-width', function () {
+    const $this = $(this)
+    const $face = $this.closest('.face')
+    const face = getSelectedSpritesheet().faces[$face.index()]
+    const $input = $face.find('.scale-face-value')
+
+    // Get value, reset and return if it's 0 or blank
+    let val = $input.val()
+    if (isNaN(val = parseInt(val, 10)) || val === 0)
+        return $input.val('')
+
+    // Apply scaling things
+    face.height = Math.round(val / (face.width / face.height))
+    face.width = val
+
+    // Update the display image with the new dimensions
+    face.getPreviewHTML((err, html) => {
+        $face.children('.face-preview-wrap').remove()
+        $face.prepend($(html))
+    })
+
+    // Update the width and height inputs
+    $face.find('.face-width').val(face.width)
+    $face.find('.face-height').val(face.height)
+
+    // Reset the value input
+    $input.val('')
+})
+$document.on('click', '.scale-face-to-height', function () {
+    const $this = $(this)
+    const $face = $this.closest('.face')
+    const face = getSelectedSpritesheet().faces[$face.index()]
+    const $input = $face.find('.scale-face-value')
+
+    // Get value, reset and return if it's 0 or blank
+    let val = $input.val()
+    if (isNaN(val = parseInt(val, 10)) || val === 0)
+        return $input.val('')
+
+    // Apply scaling things
+    face.width = Math.round(val / (face.height / face.width))
+    face.height = val
+
+    // Update the display image with the new dimensions
+    face.getPreviewHTML((err, html) => {
+        $face.children('.face-preview-wrap').remove()
+        $face.prepend($(html))
+    })
+
+    // Update the width and height inputs
+    $face.find('.face-width').val(face.width)
+    $face.find('.face-height').val(face.height)
+
+    // Reset the value input
+    $input.val('')
+})
 
 // Events - settings
 $document.on('click', '.project-settings-collapse', function () {
