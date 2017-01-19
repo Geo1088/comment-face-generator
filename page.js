@@ -179,8 +179,13 @@ $document.on('click', '.add-face', function () {
     })
     if (!filepaths) return // showOpenDialog returns undefined on cancel
 
-    // Loop through each file added
-    for (let filepath of filepaths) {
+    // Recursively loop through file paths and add the preview HTML for each
+    ! function handlePath (index) {
+        const filepath = filepaths[index]
+        if (!filepath)
+            return // We're done once we hit the end of the list
+
+        console.log('Handling face', path.basename(filepath))
         // Create a new face object and add it to the current spritesheet
         const spritesheet = getSelectedSpritesheet()
         const face = spritesheet.createFace({
@@ -195,9 +200,11 @@ $document.on('click', '.add-face', function () {
         })
 
         face.getFullHTML((err, html) => {
+            if (err) return
             $('.faces').append($(html))
+            handlePath(index + 1)
         })
-    }
+    }(0)
 })
 $document.on('click', '.delete-face', function () {
     const $face = $(this).closest('.face')
