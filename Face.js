@@ -55,19 +55,25 @@ class Face {
     }
 
     sizedImage (callback) {
+        // Get jimp image
         this.image.jimp((err, image) => {
             if (err) callback(err)
+            // Reset to initial dimensions if this is true
             if (this.useNativeRes) {
                 this.useNativeRes = false
                 this.width = image.bitmap.width
                 this.height = image.bitmap.height
             }
+            // Resize and call back
             image.cover(this.width, this.height, callback)
         })
     }
 
     sizedPreviewImageURL (callback) {
+        // Get a sized image
         this.sizedImage((err, image) => {
+            if (err) callback(err)
+            // Convert to base 64 and call back
             image.getBase64(jimp.AUTO, callback)
         })
     }
