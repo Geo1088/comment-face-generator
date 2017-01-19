@@ -37,15 +37,10 @@
                     <span>x</span>
                     <input class="spritesheet-default-height" type="number" name="spritesheet-default-height" value="0">
                 </span>
-                <button class="reset-face-dimensions">Set all faces to default</button>
-                <button class="delete-spritesheet">Delete spritesheet</button>
-                <button class="save-spritesheet">Save Spritesheet</button>
 
                 <div class="right">
-                    <button class="add-face">Add face</button>
-                    &nbsp;&bull;
                     <div class="tab-buttons">
-                        <button data-for="faces" class="active">Faces</button>
+                        <button data-for="faces-container" class="active">Faces</button>
                         <button data-for="preview-output">Output</button>
                         <!-- <button data-for="preview-raw-data">Raw</button> -->
                     </div>
@@ -53,7 +48,17 @@
             </div>
 
             <div class="faces-and-previews tabbed">
-                <div class="tab faces active"></div>
+                <div class="tab faces-container active">
+                    <div class="faces-floater">
+                        <button class="reset-face-dimensions">Set all faces to default</button>
+                        <button class="delete-spritesheet">Delete spritesheet</button>
+
+                        <div class="right">
+                            <button class="add-face">Add face</button>
+                        </div>
+                    </div>
+                    <div class="faces"></div>
+                </div>
                 <div class="tab preview-output">
                     <pre class="preview-css"></pre>
                     <div class="preview-spritesheets"></div>

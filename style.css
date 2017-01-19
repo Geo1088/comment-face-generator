@@ -7,7 +7,7 @@ body {
     margin: 0;
     width: 100vw;
     height: 100vh;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Open Sans', 'Segoe UI', sans-serif;
 }
 
 input[type="text"], input[type="number"], button {
@@ -188,12 +188,12 @@ input[type="text"], input[type="number"], button {
 
 /* Faces tab */
 
-.faces {
+.faces-container {
     padding: 10px;
     height: 100%;
     overflow-y: scroll;
 }
-.face {
+.face, .faces-floater {
     -webkit-user-select: initial;
     /*font-family: 'Verdana', sans-serif;
     color: #FFF;
@@ -230,7 +230,8 @@ input[type="text"], input[type="number"], button {
 
 .faces:empty {
     height: 100%;
-    margin: 0;
+    margin: -44px 0 0;
+    padding: 44px 0 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -248,6 +249,23 @@ input[type="text"], input[type="number"], button {
     content: "Add some with the \"Add face\" button.";
     margin: 0 10px;
     text-align: center;
+}
+.faces:empty + .faces-floater {
+    display: none;
+}
+.faces-floater {
+    padding: 5px;
+    box-shadow: 0 -10px #FFF;
+    position: relative;
+}
+.faces-floater button,
+.faces-floater input {
+    margin: 0 5px 0 0;
+}
+.faces-floater .right {
+    position: absolute;
+    right: 0;
+    display: flex;
 }
 
 /* Output tab */
