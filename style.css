@@ -43,7 +43,7 @@ input[type="text"], input[type="number"], button {
 }
 .header h1 {
     font-size: 18px;
-    font-family: 'Asap', 'Trebuchet MS', sans-serif;
+    font-family: 'Asap', 'Segoe UI', sans-serif;
     height: 22px;
     margin: 0;
 }
@@ -241,7 +241,7 @@ input[type="text"], input[type="number"], button {
     content: "This spritesheet has no faces!";
     font-weight: bold;
     font-size: 18px;
-    font-family: 'Asap', 'Trebuchet MS', sans-serif;
+    font-family: 'Asap', 'Segoe UI', sans-serif;
     margin: 0 10px 5px;
     text-align: center;
 }
