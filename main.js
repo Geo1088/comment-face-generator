@@ -8,7 +8,11 @@ let win
 
 function createWindow () {
     // Create the browser window and load our stuff
-    win = new BrowserWindow({width: 1200, height: 600, autoHideMenuBar: true})
+    win = new BrowserWindow({
+        width: 1200,
+        height: 600,
+        autoHideMenuBar: true
+    })
     // win.setMenu(null) // doing this will prevent dev tools from being used and stuff
     win.loadURL(url.format({
         pathname: path.join(__dirname, 'index.html'),
