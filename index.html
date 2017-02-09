@@ -5,7 +5,6 @@
         <title>Comment face generator</title>
         <link href="https://fonts.googleapis.com/css?family=Open+Sans|Asap|Source+Code+Pro" rel="stylesheet">
         <link rel="stylesheet" href="style.css">
-        <script type="text/javascript" src="page.js"></script>
     </head>
     <body>
 
@@ -31,16 +30,9 @@
             <div class="spritesheet-actions">
                 <input class="spritesheet-title "type="text" name="spritesheet-title" value="" placeholder="SheetName">
 
-                <span class="input-group spritesheet-default-dimensions">
-                    <span>DD:</span>
-                    <input class="spritesheet-default-width" type="number" name="spritesheet-default-width" value="0">
-                    <span>x</span>
-                    <input class="spritesheet-default-height" type="number" name="spritesheet-default-height" value="0">
-                </span>
-
                 <div class="right">
                     <div class="tab-buttons">
-                        <button data-for="faces-container" class="active">Faces</button>
+                        <button data-for="faces" class="active">Faces</button>
                         <button data-for="preview-output">Output</button>
                         <!-- <button data-for="preview-raw-data">Raw</button> -->
                     </div>
@@ -48,10 +40,14 @@
             </div>
 
             <div class="faces-and-previews tabbed">
-                <div class="tab faces-container active">
-                    <div class="faces-floater">
+                <div class="tab faces active">
+                    <div class="toolbar">
                         <button class="reset-face-dimensions">Set all faces to default</button>
                         <button class="delete-spritesheet">Delete spritesheet</button>
+
+                        <input class="spritesheet-default-width" type="number" name="spritesheet-default-width" value="0">
+                        <span>x</span>
+                        <input class="spritesheet-default-height" type="number" name="spritesheet-default-height" value="0">
 
                         <label class="popover-wrap">
                             <button class="popover-trigger">Test button</button>
@@ -64,15 +60,21 @@
                             <button class="add-face">Add face</button>
                         </div>
                     </div>
-                    <div class="faces"></div>
+                    <div class="faces-container"></div>
                 </div>
                 <div class="tab preview-output">
-                    <pre class="preview-css"></pre>
-                    <div class="preview-spritesheets"></div>
+                    <div class="toolbar">
+                        test
+                    </div>
+                    <div class="previews">
+                        <pre class="preview-css"></pre>
+                        <div class="preview-spritesheets"></div>
+                    </div>
                 </div>
                 <!-- <pre class="tab preview-raw-data"></pre> -->
             </div>
         </div>
 
+        <script type="text/javascript" src="page.js"></script>
     </body>
 </html>

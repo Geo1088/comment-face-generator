@@ -40,7 +40,7 @@ function selectSpritesheet (data) {
     $('.face').remove()
     for (let face of spritesheet.faces) {
         face.getFullHTML((err, html) => {
-            $('.faces').append($(html))
+            $('.faces-container').append($(html))
         })
     }
 }
@@ -158,8 +158,8 @@ $document.on('click', '.reset-face-dimensions', function () {
     spritesheet.faces.forEach((face, index) => {
         face.width = spritesheet.defaultWidth
         face.height = spritesheet.defaultHeight
-        $('.faces').eq(index).find('.face-width').val(spritesheet.defaultWidth)
-        $('.faces').eq(index).find('.face-height').val(spritesheet.defaultHeight)
+        $('.faces-container').eq(index).find('.face-width').val(spritesheet.defaultWidth)
+        $('.faces-container').eq(index).find('.face-height').val(spritesheet.defaultHeight)
     })
     updateAllFacePreviews()
 })
@@ -201,7 +201,7 @@ $document.on('click', '.add-face', function () {
 
         face.getFullHTML((err, html) => {
             if (err) return
-            $('.faces').append($(html))
+            $('.faces-container').append($(html))
             handlePath(index + 1)
         })
     }(0)

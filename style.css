@@ -94,7 +94,7 @@ input[type="text"], input[type="number"], button {
 
 .main-view {
     flex: 0 1 100%;
-    overflow: auto;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     -webkit-user-select: none;
@@ -159,9 +159,12 @@ input[type="text"], input[type="number"], button {
 /* Face edit/preview area */
 /**************************/
 
-.faces-and-previews {
+.tabbed {
     flex: 0 1 100%;
     height: calc(100% - 33px);
+}
+.tab {
+    height: 100%;
 }
 .tab:not(.active) {
     display: none !important; /* important because other tabs try to override this */
@@ -186,14 +189,33 @@ input[type="text"], input[type="number"], button {
     background: #FFF;
 }
 
+.toolbar {
+    padding: 5px 10px;
+    /*box-shadow: 0 -10px #FFF;*/
+    position: relative;
+    display: flex;
+    border-bottom: 1px solid #DDD;
+}
+.toolbar button,
+.toolbar input,
+.toolbar span {
+    margin: 0 5px 0 0;
+}
+.toolbar .right {
+    position: absolute;
+    right: 5px;
+    display: flex;
+}
+
+
 /* Faces tab */
 
 .faces-container {
     padding: 10px;
-    height: 100%;
+    height: calc(100% - 33px);
     overflow-y: scroll;
 }
-.face, .faces-floater {
+.face {
     -webkit-user-select: initial;
     /*font-family: 'Verdana', sans-serif;
     color: #FFF;
@@ -228,16 +250,14 @@ input[type="text"], input[type="number"], button {
     width: 40px;
 }
 
-.faces:empty {
-    height: 100%;
-    margin: -44px 0 0;
-    padding: 44px 0 0;
+.faces-container:empty {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    overflow-y: hidden;
 }
-.faces:empty::before {
+.faces-container:empty::before {
     content: "This spritesheet has no faces!";
     font-weight: bold;
     font-size: 18px;
@@ -245,31 +265,17 @@ input[type="text"], input[type="number"], button {
     margin: 0 10px 5px;
     text-align: center;
 }
-.faces:empty::after {
+.faces-container:empty::after {
     content: "Add some with the \"Add face\" button.";
     margin: 0 10px;
     text-align: center;
 }
-.faces:empty + .faces-floater {
+.faces-container:empty + .faces-floater {
     display: none;
-}
-.faces-floater {
-    padding: 5px;
-    box-shadow: 0 -10px #FFF;
-    position: relative;
-}
-.faces-floater button,
-.faces-floater input {
-    margin: 0 5px 0 0;
-}
-.faces-floater .right {
-    position: absolute;
-    right: 0;
-    display: flex;
 }
 
 /* Output tab */
-.preview-output {
+.previews {
     display: flex;
     height: 100%;
 }
@@ -278,7 +284,7 @@ input[type="text"], input[type="number"], button {
     margin: 0;
     padding: 5px;
     flex: 0 1 50%;
-    height: 100%;
+    height: calc(100% - 33px);
     overflow-y: scroll;
     font-family: 'Source Code Pro', monospace;
     white-space: pre-wrap;
@@ -287,7 +293,7 @@ input[type="text"], input[type="number"], button {
 
 .preview-spritesheets {
     flex: 0 1 50%;
-    height: 100%;
+    height: calc(100% - 33px);
     overflow-y: scroll;
 }
 
