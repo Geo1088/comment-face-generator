@@ -349,3 +349,18 @@ $document.on('click', '.project-settings-collapse', function () {
 $document.on('change', '.use-slashes-setting', function () {
     project.settings.useSlashes = $(this).is(':checked')
 })
+
+// Test
+document.querySelectorAll('.popover-wrap').forEach(wrapper => {
+    const button = wrapper.querySelector('.popover-trigger')
+    const box = wrapper.querySelector('.popover-box')
+    // Set up initial display
+    box.style.display = 'none'
+    // Add event listener to toggle later
+    button.addEventListener('click', function () {
+        if (box.style.display === 'none')
+            box.style.display = 'block'
+        else
+            box.style.display = 'none'
+    })
+})
