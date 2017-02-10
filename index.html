@@ -31,6 +31,7 @@
                 <input class="spritesheet-title "type="text" name="spritesheet-title" value="" placeholder="SheetName">
 
                 <div class="right">
+                    <button class="delete-spritesheet">Delete spritesheet</button>
                     <div class="tab-buttons">
                         <button data-for="faces" class="active">Faces</button>
                         <button data-for="preview-output">Output</button>
@@ -42,19 +43,21 @@
             <div class="faces-and-previews tabbed">
                 <div class="tab faces active">
                     <div class="toolbar">
-                        <button class="reset-face-dimensions">Set all faces to default</button>
-                        <button class="delete-spritesheet">Delete spritesheet</button>
+                        <!-- TODO: This needs to be implemted in faces -->
+                        <!-- <label class="checkbox-wrapper">
+                            <input type="checkbox" class="select-all-faces">
+                        </label> -->
 
-                        <input class="spritesheet-default-width" type="number" name="spritesheet-default-width" value="0">
-                        <span>x</span>
-                        <input class="spritesheet-default-height" type="number" name="spritesheet-default-height" value="0">
-
-                        <label class="popover-wrap">
-                            <button class="popover-trigger">Test button</button>
+                        <span>All faces:</span>
+                        <span class="popover-wrap">
+                            <button class="popover-trigger">Resize</button>
                             <div class="popover-box">
-                                test
+                                <input class="spritesheet-default-width" type="number" name="spritesheet-default-width" value="0">
+                                <span>x</span>
+                                <input class="spritesheet-default-height" type="number" name="spritesheet-default-height" value="0">
+                                <button class="reset-face-dimensions dismisses-popover">Go</button>
                             </div>
-                        </label>
+                        </span>
 
                         <div class="right">
                             <button class="add-face">Add face</button>

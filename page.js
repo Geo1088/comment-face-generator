@@ -364,3 +364,14 @@ document.querySelectorAll('.popover-wrap').forEach(wrapper => {
             box.style.display = 'none'
     })
 })
+// Find closest ancestor with class - http://stackoverflow.com/a/22119674
+function findAncestor (el, cls) {
+    while ((el = el.parentElement) && !el.classList.contains(cls));
+    return el;
+}
+document.querySelectorAll('.dismisses-popover').forEach(button => {
+    const box = findAncestor(button, 'popover-box')
+    button.addEventListener('click', function () {
+        box.style.display = 'none'
+    })
+})
