@@ -11,8 +11,16 @@ body {
 }
 
 input[type="text"], input[type="number"], button {
+    border: 1px solid #BBB;
     height: 22px;
     font-family: inherit;
+    border-radius: 2px;
+}
+button {
+    background: linear-gradient(to bottom, #DDD, #CCC);
+}
+button:active {
+    background: #CCC;
 }
 
 /************************/
@@ -178,6 +186,7 @@ input[type="text"], input[type="number"], button {
 
 .tab-buttons button {
     border: 0;
+    border-radius: 0;
     margin: -5px 3px;
     height: 32px;
     background: transparent;
