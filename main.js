@@ -9,7 +9,7 @@ let win
 function createWindow () {
     // Create the browser window and load our stuff
     win = new BrowserWindow({
-        width: 1200,
+        width: 1000,
         height: 600,
         autoHideMenuBar: true
     })
