@@ -145,14 +145,9 @@ button:active {
 .spritesheet-actions .input-group {
     display: flex;
     height: 22px;
-    /*background: #F7F7F7;*/
-    /*box-shadow: inset 0 0 0 1px #A9A9A9;*/
     padding: 0 5px;
 }
 .spritesheet-actions .right {
-    /*position: absolute;*/
-    right: 17px;
-    padding: 0 5px;
     display: flex;
 }
 .spritesheet-actions * {
@@ -166,31 +161,24 @@ button:active {
 /* Face edit/preview area */
 /**************************/
 
-.tabbed {
-    flex: 0 1 100%;
-    height: calc(100% - 33px);
-}
 .tab {
     height: 100%;
 }
 .tab:not(.active) {
     display: none !important; /* important because other tabs try to override this */
 }
-.tabbed .tab-buttons {
-    position: absolute;
-    right: 17px;
-    bottom: 0;
-    padding: 5px;
-}
 
 .tab-buttons button {
     border: 0;
     border-radius: 0;
-    margin: -5px 3px;
-    height: 32px;
+    margin: 1px 0 -5px 2px;
+    height: 26px;
     background: transparent;
     box-shadow: 0 0 0 1px #BBB;
     outline: none !important;
+}
+.tab-buttons button + button {
+    margin-left: 7px;
 }
 .tab-buttons button.active {
     box-shadow: 0 1px #FFF, 0 0 0 1px #BBB;
