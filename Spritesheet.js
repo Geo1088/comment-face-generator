@@ -1,12 +1,30 @@
 const jimp = require('jimp')
 const Face = require('./Face.js')
 
+// im bad - http://stackoverflow.com/a/1053865
+function mode(array) {
+    if (array.length == 0) return null
+    let modeMap = {}
+    let maxEl = array[0]
+    let maxCount = 1
+    for(let i = 0; i < array.length; i++) {
+        let el = array[i]
+        if (modeMap[el] == null)
+            modeMap[el] = 1
+        else
+            modeMap[el]++
+        if (modeMap[el] > maxCount) {
+            maxEl = el
+            maxCount = modeMap[el]
+        }
+    }
+    return maxEl
+}
+
 class Spritesheet {
     constructor (data) {
         this.name = data.name || 'Sheet'
         this.faces = []
-        this.defaultWidth = data.defaultWidth
-        this.defaultHeight = data.defaultHeight
 
         this.project = null
 
@@ -40,11 +58,22 @@ class Spritesheet {
     }
 
     get fullCSS () {
-        return this.faces.map(f => f.fullCSS).join('\n') + `\n
+        // First, we have to figure out what the modt-used width and height are
+        let widths = []
+        let heights = []
+        for (let face of this.faces) {
+            widths.push(face.width)
+            heights.push(face.height)
+        }
+        const defaultWidth = mode(widths)
+        const defaultHeight = mode(heights)
+
+        // Now we can do a bunch of mapping and return a string
+        return this.faces.map(f => f.fullCSS(defaultWidth, defaultHeight)).join('\n') + `\n
 ${this.faces.map(f => f.selector).join(',')}{
 \tbackground-image: url(%%${this.name}%%);
-\twidth: ${this.defaultWidth}px;
-\theight: ${this.defaultHeight}px;
+\twidth: ${defaultWidth}px;
+\theight: ${defaultHeight}px;
 }`
     }
 
@@ -95,8 +124,6 @@ ${this.faces.map(f => f.selector).join(',')}{
     get object () {
         return {
             name: this.name,
-            defaultWidth: this.defaultWidth,
-            defaultHeight: this.defaultHeight,
             faces: this.faces.map(face => face.object)
         }
     }

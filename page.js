@@ -35,8 +35,6 @@ function selectSpritesheet (data) {
     // Otherwise, update the things
     $('.spritesheet-actions input, .spritesheet-actions button').attr('disabled', false)
     $('.spritesheet-title').val(spritesheet.name)
-    $('.spritesheet-default-width').val(spritesheet.defaultWidth)
-    $('.spritesheet-default-height').val(spritesheet.defaultHeight)
 
     // We also need to re-create the face list now
     $('.face').remove()
@@ -108,8 +106,6 @@ function addFaces () {
             name: path.basename(filepath)
                 .replace(/\.[^\.]*$/, '')
                 .replace(/\s/g, '_'),
-            width: spritesheet.defaultWidth,
-            height: spritesheet.defaultHeight,
             image: {
                 path: filepath
             }
@@ -179,22 +175,6 @@ $document.on('change', '.spritesheet-title', function () {
     spritesheet.name = $(this).val()
     $('.spritesheet.active').html(spritesheet.name)
 })
-$document.on('change', '.spritesheet-default-width', function () {
-    const spritesheet = getSelectedSpritesheet()
-    const val = Math.max(parseInt($(this).val()), 0)
-    spritesheet.defaultWidth = val
-
-    // Update placeholders on existing faces
-    $('.face-width').attr('placeholder', val)
-})
-$document.on('change', '.spritesheet-default-height', function () {
-    const spritesheet = getSelectedSpritesheet()
-    const val = Math.max(parseInt($(this).val()), 0)
-    spritesheet.defaultHeight = val
-
-    // Update placeholders on existing faces
-    $('.face-height').attr('placeholder', val)
-})
 function updateAllFacePreviews () {
     const spritesheet = getSelectedSpritesheet()
     $('.face').each(function (index) {
@@ -207,13 +187,15 @@ function updateAllFacePreviews () {
         }
     })
 }
-$document.on('click', '.reset-face-dimensions', function () {
+$document.on('click', '.set-all-face-dimensions', function () {
     const spritesheet = getSelectedSpritesheet()
+    const width = Math.max(parseInt($('.all-width').val()), 0)
+    const height = Math.max(parseInt($('.all-height').val()), 0)
     spritesheet.faces.forEach((face, index) => {
-        face.width = spritesheet.defaultWidth
-        face.height = spritesheet.defaultHeight
-        $('.faces-container').eq(index).find('.face-width').val(spritesheet.defaultWidth)
-        $('.faces-container').eq(index).find('.face-height').val(spritesheet.defaultHeight)
+        face.width = width
+        face.height = height
+        $('.faces-container').eq(index).find('.face-width').val(width)
+        $('.faces-container').eq(index).find('.face-height').val(height)
     })
     updateAllFacePreviews()
 })
@@ -242,9 +224,10 @@ $document.on('change', '.face-width', function () {
     const index = $face.index()
     const face = getSelectedSpritesheet().faces[index]
 
-    // Get the current value, and change it around if necessary
+    // Get the current value
     let val = parseInt($this.val(), 10)
-    if (isNaN(val)) val = face.spritesheet.defaultWidth
+    // If it's invalid, just set it back to what it was
+    if (isNaN(val)) return $this.val(face.width)
 
     // Write back to the data object
     face.width = val
@@ -263,7 +246,7 @@ $document.on('change', '.face-height', function () {
 
     // Get the current value, and change it around if necessary
     let val = parseInt($this.val(), 10)
-    if (isNaN(val)) val = face.spritesheet.defaultHeight
+    if (isNaN(val)) return $this.val(face.height)
 
     // Write back to the data object
     face.height = val
@@ -275,24 +258,6 @@ $document.on('change', '.face-height', function () {
     })
 })
 // Resizing
-$document.on('click', '.set-face-default-dimensions', function () {
-    const $face = $(this).closest('.face')
-    const face = getSelectedSpritesheet().faces[$face.index()]
-
-    // Get the spritesheet's default dimensions and assign them to the face
-    face.width = face.spritesheet.defaultWidth
-    face.height = face.spritesheet.defaultHeight
-
-    // Update the display image with the new dimensions
-    face.getPreviewHTML((err, html) => {
-        $face.children('.face-preview-wrap').remove()
-        $face.prepend($(html))
-    })
-
-    // Update the width and height inputs
-    $face.find('.face-width').val(face.width)
-    $face.find('.face-height').val(face.height)
-})
 $document.on('click', '.set-face-initial-dimensions', function () {
     const $face = $(this).closest('.face')
     const face = getSelectedSpritesheet().faces[$face.index()]

@@ -41,11 +41,11 @@ class Face {
         return `.md [href="${this.spritesheet.project.settings.useSlashes ? '/' : '#'}${this.name}"]`
     }
 
-    get fullCSS () {
+    fullCSS (defaultWidth = 0, defaultHeight = 0) {
         let width = '', height = ''
-        if (this.width !== this.spritesheet.defaultWidth)
+        if (this.width !== defaultWidth)
             width = `;width:${this.width}px!important`
-        if (this.height !== this.spritesheet.defaultHeight)
+        if (this.height !== defaultHeight)
             height = `;height:${this.height}px!important`
 
         const bgX = this.bgX ? '0' : `-${this.bgX}px`
@@ -110,11 +110,10 @@ class Face {
                     <div class="face-actions">
                         <input class="face-name hover-only" type="text" value="${this.name}">
                         <br>
-                        <input class="face-width" type="number" placeholder="${this.spritesheet.defaultWidth}" value="${this.width}">
+                        <input class="face-width" type="number" value="${this.width}">
                         x
-                        <input class="face-height" type="number" placeholder="${this.spritesheet.defaultHeight}" value="${this.height}">
+                        <input class="face-height" type="number" value="${this.height}">
                         <br>
-                        <button class="set-face-default-dimensions">Set to spritesheet default dimensions</button>
                         <button class="set-face-initial-dimensions">Set to initial file dimensions</button>
                         <br>
                         Scale to: <input type="number" class="scale-face-value">
