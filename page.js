@@ -365,9 +365,6 @@ $document.on('click', '.scale-face-to-height', function () {
 })
 
 // Events - settings
-$document.on('click', '.project-settings-collapse', function () {
-    $('.project-settings-header').toggleClass('show')
-})
 $document.on('change', '.use-slashes-setting', function () {
     project.settings.useSlashes = $(this).is(':checked')
 })
@@ -454,9 +451,6 @@ function open () {
     refreshDisplay()
 }
 
-// Interface buttons for save/load
-$document.on('click', '.export-project', saveAs)
-$document.on('click', '.import-project', open)
 function newProject () {
     if (alertIfNotSaved()) return
     project = new Project()
