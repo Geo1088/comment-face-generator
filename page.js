@@ -1,6 +1,8 @@
 // Packages
-const {dialog, BrowserWindow} = require('electron').remote
+const {dialog, BrowserWindow, Menu, app, shell} = require('electron').remote
+const defaultMenu = require('electron-default-menu')
 const path = require('path')
+const fs = require('fs')
 const jimp = require('jimp')
 window.$ = window.jQuery = require('jquery')
 // Classes
@@ -8,7 +10,7 @@ const Project = require('./Project.js')
 
 
 // Initialization
-const project = new Project() // The current project - one per window
+let project = new Project() // The current project - one per window
 const $document = $(document)
 let currentImageData
 
@@ -63,6 +65,17 @@ function deleteSpritesheet (data) {
     const index = (typeof data === 'number' ? data : project.spritesheets.indexOf(data))
     project.spritesheets.splice(index, 1)
     $('.spritesheet').eq(index).remove()
+}
+// Completely refresh the display, reconstructing the spritesheet and face lists
+function refreshDisplay () {
+    // Clean slate
+    $('.spritesheets-list .spritesheet').remove()
+    // Apply things
+    for (let spritesheet of project.spritesheets) {
+        $('.spritesheets-list').append($(spritesheet.listItem))
+    }
+    // Now we do the things
+    selectSpritesheet(0)
 }
 
 
@@ -389,3 +402,78 @@ document.querySelectorAll('.dismisses-popover').forEach(button => {
         box.style.display = 'none'
     })
 })
+
+
+// Saving and loading
+function setWritePath () {
+    const filepath = dialog.showSaveDialog(BrowserWindow.getFocusedWindow(), {
+        title: 'Save spritesheet',
+        defaultPath: 'MyProject.spset',
+        filters: [
+            {name: 'Spritesheet collection', extensions: ['spset', 'json']}
+        ]
+    })
+    if (!filepath) return
+    project.savePath = filepath
+}
+function writeProject () {
+    const fileContents = JSON.stringify(project.object)
+    fs.writeFileSync(project.savePath, fileContents, 'utf-8')
+}
+function save () {
+    if (!project.writePath) setWritePath()
+    writeProject()
+}
+function saveAs () {
+    setWritePath()
+    writeProject()
+}
+
+function open () {
+    let filepath = dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
+        title: 'Import a project',
+        properties: [
+            'openFile'
+        ],
+        filters: [
+            {name: 'Spritesheet collection', extensions: ['spset', 'json']}
+        ]
+    })
+    if (!filepath) return // showOpenDialog returns undefined on cancel
+    filepath = filepath[0]
+    const data = fs.readFileSync(filepath, 'utf-8')
+    project = new Project(JSON.parse(data))
+    project.savePath = filepath
+    refreshDisplay()
+}
+
+// Interface buttons for save/load
+$document.on('click', '.export-project', saveAs)
+$document.on('click', '.import-project', open)
+
+// Get the default menu, and add our custom file menu to it
+let menu = defaultMenu(app, shell)
+menu.unshift({
+    label: 'File',
+    submenu: [
+        {
+            label: 'Save',
+            accelerator: 'CmdOrCtrl+S',
+            click: save
+        },
+        {
+            label: 'Save as...',
+            accelerator: 'CmdOrCtrl+Shift+S',
+            click: saveAs
+        },
+        {
+            type: 'separator'
+        },
+        {
+            label: 'Open',
+            accelerator: 'CmdOrCtrl+O',
+            click: open
+        }
+    ]
+})
+BrowserWindow.getFocusedWindow().setMenu(Menu.buildFromTemplate(menu))

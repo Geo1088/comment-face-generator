@@ -20,6 +20,8 @@ class Project {
                 this.createSpritesheet(sheetData)
             }
         }
+
+        this.savePath = ''
     }
 
     createSpritesheet (spritesheet) {

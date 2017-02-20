@@ -11,9 +11,9 @@ function createWindow () {
     win = new BrowserWindow({
         width: 1000,
         height: 600,
-        autoHideMenuBar: true
+        autoHideMenuBar: false
     })
-    // win.setMenu(null) // doing this will prevent dev tools from being used and stuff
+    win.setMenu(null) // The menu is loaded from page.js after window load
     win.loadURL(url.format({
         pathname: path.join(__dirname, 'index.html'),
         protocol: 'file:',
