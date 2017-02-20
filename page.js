@@ -61,10 +61,12 @@ function createSpritesheet (data) {
     $('.spritesheets-list').append($(newSheet.listItem))
     selectSpritesheet(newSheet)
 }
-function deleteSpritesheet (data) {
+function deleteSpritesheet (data = getSelectedSpritesheetIndex()) {
     const index = (typeof data === 'number' ? data : project.spritesheets.indexOf(data))
     project.spritesheets.splice(index, 1)
     $('.spritesheet').eq(index).remove()
+    if (index > 0) index--
+    selectSpritesheet(index)
 }
 // Completely refresh the display, reconstructing the spritesheet and face lists
 function refreshDisplay () {
@@ -103,20 +105,13 @@ $document.on('click', '.tab-buttons [data-for="preview-output"]', function () {
 })
 
 // Events - spritesheet controls
-$document.on('click', '.create-spritesheet', function () {
-    createSpritesheet()
-    $('.spritesheet-actions input, .spritesheet-actions button').attr('disabled', false)
-})
+$document.on('click', '.create-spritesheet', newSpritesheet)
+// TODO: This should be handled by the Project initializer
 $(window).on('load', function () {
     createSpritesheet()
 })
 
-$document.on('click', '.delete-spritesheet', function () {
-    let index = getSelectedSpritesheetIndex()
-    deleteSpritesheet(index)
-    if (index > 0) index--
-    selectSpritesheet(index)
-})
+$document.on('click', '.delete-spritesheet', deleteSpritesheet)
 $document.on('click', '.save-spritesheet', function () {
     if (!currentImageData) return
     const path = dialog.showSaveDialog(BrowserWindow.getFocusedWindow(), {
@@ -428,8 +423,20 @@ function saveAs () {
     setWritePath()
     writeProject()
 }
+function alertIfNotSaved () {
+    // TODO
+    // if project needs to be saved:
+    //     present dialog "do you want to save?" y/n/c
+    //     if c: return true
+    //     if y: save
+    //     if n: pass
+    //     return false
+    // else: return false
+    return false
+}
 
 function open () {
+    if (alertIfNotSaved()) return
     let filepath = dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
         title: 'Import a project',
         properties: [
@@ -450,32 +457,85 @@ function open () {
 // Interface buttons for save/load
 $document.on('click', '.export-project', saveAs)
 $document.on('click', '.import-project', open)
+function newProject () {
+    if (alertIfNotSaved()) return
+    project = new Project()
+    refreshDisplay()
+}
+
+function newSpritesheet () {
+    createSpritesheet()
+    $('.spritesheet-actions input, .spritesheet-actions button').attr('disabled', false)
+}
 
 // Get the default menu, and add our custom file menu to it
 let menu = defaultMenu(app, shell)
 menu.unshift({
-    label: 'File',
+    label: 'Project',
     submenu: [
         {
-            label: 'Save',
-            accelerator: 'CmdOrCtrl+S',
-            click: save
+            label: 'New Project',
+            accelerator: 'CmdOrCtrl+Shift+N',
+            click: newProject
         },
         {
-            label: 'Save as...',
-            accelerator: 'CmdOrCtrl+Shift+S',
-            click: saveAs
+            label: 'Open Project',
+            accelerator: 'CmdOrCtrl+O',
+            click: open
         },
         {
             type: 'separator'
         },
         {
-            label: 'Open',
-            accelerator: 'CmdOrCtrl+O',
-            click: open
+            label: 'Save Project',
+            accelerator: 'CmdOrCtrl+S',
+            click: save
+        },
+        {
+            label: 'Save Project As...',
+            accelerator: 'CmdOrCtrl+Shift+S',
+            click: saveAs
+        },
+    ]
+}, {
+    label: 'Spritesheet',
+    submenu: [
+        {
+            label: 'New Spritesheet',
+            accelerator: 'CmdOrCtrl+N',
+            click: newSpritesheet
+        },
+        {
+            label: 'Delete This Spritesheet',
+            accelerator: 'CmdOrCtrl+Backspace',
+            click: deleteSpritesheet
         }
     ]
 })
+menu[2] = {
+    label: 'Dev stuff',
+    submenu: [
+        {
+            label: 'Reload Interface',
+            accelerator: 'CmdOrCtrl+Shift+R',
+            click: function(item, focusedWindow) {
+                if (focusedWindow) focusedWindow.reload();
+            }
+        },
+        {
+            label: 'Toggle Developer Tools',
+            accelerator: (function() {
+                if (process.platform === 'darwin')
+                return 'Alt+Command+I';
+                else
+                return 'Ctrl+Shift+I';
+            })(),
+            click: function(item, focusedWindow) {
+                if (focusedWindow) focusedWindow.toggleDevTools();
+            }
+        }
+    ]
+}// The original "View" menu
 BrowserWindow.getFocusedWindow().setMenu(Menu.buildFromTemplate(menu))
 
 // Random style thing
