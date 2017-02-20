@@ -491,7 +491,7 @@ menu.unshift({
             label: 'Save Project As...',
             accelerator: 'CmdOrCtrl+Shift+S',
             click: saveAs
-        },
+        }
     ]
 }, {
     label: 'Spritesheet',
