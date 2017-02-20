@@ -161,6 +161,9 @@ button:active {
 /* Face edit/preview area */
 /**************************/
 
+.tabbed {
+    height: 100%;
+}
 .tab {
     height: 100%;
 }
