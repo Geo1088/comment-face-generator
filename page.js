@@ -38,11 +38,15 @@ function selectSpritesheet (data) {
 
     // We also need to re-create the face list now
     $('.face').remove()
-    for (let face of spritesheet.faces) {
+    // Do this via a recursive function because otherwise things get out of order
+    ! function addFaceToList (index = 0) {
+        const face = spritesheet.faces[index]
+        if (face == null) return
         face.getFullHTML((err, html) => {
             $('.faces-container').append($(html))
+            addFaceToList(index + 1)
         })
-    }
+    }()
 }
 function createSpritesheet (data) {
     if (!data) data = {
