@@ -12,6 +12,14 @@ class Project {
         // Default settings
         if (this.settings.useSlashes == null)
             this.settings.useSlashes = false
+
+        // If there's a setting for spritesheets, add them by initializing new
+        // spritesheet instances
+        if (options.spritesheets) {
+            for (const sheetData of options.spritesheets) {
+                this.createSpritesheet(sheetData)
+            }
+        }
     }
 
     createSpritesheet (spritesheet) {

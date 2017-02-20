@@ -9,6 +9,13 @@ class Spritesheet {
         this.defaultHeight = data.defaultHeight
 
         this.project = null
+
+        // If faces are provided, add them
+        if (data.faces) {
+            for (let faceData of data.faces) {
+                this.createFace(faceData)
+            }
+        }
     }
 
     createFace (data) {

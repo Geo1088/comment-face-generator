@@ -21,9 +21,13 @@ class Image {
         }
     }
 
-    get base64URL () {
-        return `data:image/${this.format};base64,${this.base64Data}`
+    get base64Data () {
+        return this.buffer.toString('base64')
     }
+
+    // get base64URL () {
+    //     return `data:image/${this.format};base64,${this.base64Data}`
+    // }
 
     jimp (callback) {
         return jimp.read(this.buffer, callback)
@@ -32,7 +36,7 @@ class Image {
     get object () {
         return {
             path: this.path,
-            buffer: this.buffer
+            bufferBase64: this.base64Data
         }
     }
 }
