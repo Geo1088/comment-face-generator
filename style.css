@@ -216,7 +216,7 @@ button:active {
 
 .faces-container {
     padding: 10px;
-    height: calc(100% - 33px);
+    height: calc(100% - 66px);
     overflow-y: scroll;
 }
 .face {
@@ -281,7 +281,7 @@ button:active {
 /* Output tab */
 .previews {
     display: flex;
-    height: 100%;
+    height: calc(100% - 33px);
 }
 
 .preview-css {
