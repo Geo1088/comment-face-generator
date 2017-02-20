@@ -94,7 +94,8 @@ button:active {
     display: flex;
 }
 .project-settings-view .button-row > * {
-    flex: 0 1 100%;
+    flex: 0 1 calc(100% - 5px);
+    margin: 5px;
 }
 .project-settings-header:not(.show) + .project-settings-view {
     display: none;
