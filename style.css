@@ -149,6 +149,7 @@ button:active {
 }
 .spritesheet-actions .right {
     display: flex;
+    margin: 0 6px;
 }
 .spritesheet-actions * {
     display: flex;
