@@ -20,9 +20,6 @@ function createWindow () {
         slashes: true
     }))
 
-    // Open the DevTools.
-    win.webContents.openDevTools()
-
     // Emitted when the window is closed.
     win.on('closed', () => {
         // Dereference the window object, usually you would store windows
@@ -49,13 +46,14 @@ app.on('window-all-closed', () => {
     app.quit()
 })
 
-app.on('activate', () => {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    // if (win === null) {
-    //     createWindow()
-    // }
+// On macOS it's common to re-create a window in the app when the
+// dock icon is clicked and there are no other windows open.
+// ...however, this would only happen on mac if we allowed the app to stay
+// active after closing all windows, which we didn't.
 
-    // ...however, this would only happen on mac if we allowed the app to stay
-    // active after closing all windows, which we didn't.
-})
+// app.on('activate', () => {
+//     if (win === null) {
+//         createWindow()
+//     }
+//
+// })
