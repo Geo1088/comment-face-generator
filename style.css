@@ -22,14 +22,18 @@ button {
 button:active {
     background: #CCC;
 }
+.hover-only:not(:hover):not(:focus) {
+    border-color: transparent;
+    background: transparent;
+}
 
 /************************/
 /* Spritesheets sidebar */
 /************************/
 
 .sidebar {
-    min-width: 200px;
-    max-width: 200px;
+    min-width: 250px;
+    max-width: 250px;
     flex: 0 1 100px;
     overflow: auto;
     background: #F1F1F1;
@@ -130,12 +134,9 @@ button:active {
     /*width: 100px;*/
 }
 .spritesheet-actions .spritesheet-title {
-    /*flex: 0 1 100%;*/
     font-weight: bold;
-    /*border: none;*/
     font-size: 16px;
-    border: 0;
-    background: transparent;
+    padding: 0 4px;
 }
 .spritesheet-actions .spritesheet-title:not(:hover):not(:focus) {
     /*border-color: transparent;*/
