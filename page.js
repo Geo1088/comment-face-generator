@@ -80,6 +80,48 @@ function refreshDisplay () {
     selectSpritesheet(0)
 }
 
+// Add faces from a list of images the user selects
+function addFaces () {
+    // Get an image path from the user, and load it
+    let filepaths = dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
+        title: 'Import face',
+        properties: [
+            'openFile',
+            'multiSelections'
+        ],
+        filters: [
+            {name: 'Images', extensions: ['png', 'jpg', 'jpeg']}
+        ]
+    })
+    if (!filepaths) return // showOpenDialog returns undefined on cancel
+
+    // Recursively loop through file paths and add the preview HTML for each
+    ! function handlePath (index) {
+        const filepath = filepaths[index]
+        if (!filepath)
+            return // We're done once we hit the end of the list
+
+        console.log('Handling face', path.basename(filepath))
+        // Create a new face object and add it to the current spritesheet
+        const spritesheet = getSelectedSpritesheet()
+        const face = spritesheet.createFace({
+            name: path.basename(filepath)
+                .replace(/\.[^\.]*$/, '')
+                .replace(/\s/g, '_'),
+            width: spritesheet.defaultWidth,
+            height: spritesheet.defaultHeight,
+            image: {
+                path: filepath
+            }
+        })
+
+        face.getFullHTML((err, html) => {
+            if (err) return
+            $('.faces-container').append($(html))
+            handlePath(index + 1)
+        })
+    }(0)
+}
 
 // Events - tab menu and tab updates
 $document.on('click', '.tab-buttons button', function () {
@@ -177,47 +219,7 @@ $document.on('click', '.reset-face-dimensions', function () {
 })
 
 // Events - face controls
-$document.on('click', '.add-face', function () {
-    // Get an image path from the user, and load it
-    let filepaths = dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
-        title: 'Import face',
-        properties: [
-            'openFile',
-            'multiSelections'
-        ],
-        filters: [
-            {name: 'Images', extensions: ['png', 'jpg', 'jpeg']}
-        ]
-    })
-    if (!filepaths) return // showOpenDialog returns undefined on cancel
-
-    // Recursively loop through file paths and add the preview HTML for each
-    ! function handlePath (index) {
-        const filepath = filepaths[index]
-        if (!filepath)
-            return // We're done once we hit the end of the list
-
-        console.log('Handling face', path.basename(filepath))
-        // Create a new face object and add it to the current spritesheet
-        const spritesheet = getSelectedSpritesheet()
-        const face = spritesheet.createFace({
-            name: path.basename(filepath)
-                .replace(/\.[^\.]*$/, '')
-                .replace(/\s/g, '_'),
-            width: spritesheet.defaultWidth,
-            height: spritesheet.defaultHeight,
-            image: {
-                path: filepath
-            }
-        })
-
-        face.getFullHTML((err, html) => {
-            if (err) return
-            $('.faces-container').append($(html))
-            handlePath(index + 1)
-        })
-    }(0)
-})
+$document.on('click', '.add-face', addFaces)
 $document.on('click', '.delete-face', function () {
     const $face = $(this).closest('.face')
     getSelectedSpritesheet().faces.splice($face.index(), 1)
@@ -505,6 +507,14 @@ menu.unshift({
             label: 'Delete This Spritesheet',
             accelerator: 'CmdOrCtrl+Backspace',
             click: deleteSpritesheet
+        },
+        {
+            type: 'separator'
+        },
+        {
+            label: 'Add Faces...',
+            accelerator: 'CmdOrCtrl+I',
+            click: addFaces
         }
     ]
 })
