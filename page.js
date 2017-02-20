@@ -458,6 +458,7 @@ function open () {
 function newProject () {
     if (alertIfNotSaved()) return
     project = new Project()
+    createSpritesheet()
     refreshDisplay()
 }
 
@@ -518,7 +519,7 @@ menu.unshift({
         }
     ]
 })
-menu[2] = {
+menu[3] = {
     label: 'Dev stuff',
     submenu: [
         {
@@ -547,9 +548,7 @@ BrowserWindow.getFocusedWindow().setMenu(Menu.buildFromTemplate(menu))
 // Random style thing
 // TODO: No inline styles this is shit
 $document.ready(function () {
-    console.log('ready')
     if (process.platform !== 'darwin') {
-        console.log('test')
         $('body').css('border-top', '1px solid #BBB')
     }
 })
