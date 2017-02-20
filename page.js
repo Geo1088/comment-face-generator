@@ -62,7 +62,7 @@ function createSpritesheet (data) {
     selectSpritesheet(newSheet)
 }
 function deleteSpritesheet (data = getSelectedSpritesheetIndex()) {
-    const index = (typeof data === 'number' ? data : project.spritesheets.indexOf(data))
+    let index = (typeof data === 'number' ? data : project.spritesheets.indexOf(data))
     project.spritesheets.splice(index, 1)
     $('.spritesheet').eq(index).remove()
     if (index > 0) index--
@@ -385,8 +385,10 @@ document.querySelectorAll('.popover-wrap').forEach(wrapper => {
 })
 // Find closest ancestor with class - http://stackoverflow.com/a/22119674
 function findAncestor (el, cls) {
-    while ((el = el.parentElement) && !el.classList.contains(cls));
-    return el;
+    do {
+        el = el.parentElement
+    } while (!el.classList.contains(cls))
+    return el
 }
 document.querySelectorAll('.dismisses-popover').forEach(button => {
     const box = findAncestor(button, 'popover-box')
@@ -513,19 +515,19 @@ menu[2] = {
             label: 'Reload Interface',
             accelerator: 'CmdOrCtrl+Shift+R',
             click: function(item, focusedWindow) {
-                if (focusedWindow) focusedWindow.reload();
+                if (focusedWindow) focusedWindow.reload()
             }
         },
         {
             label: 'Toggle Developer Tools',
             accelerator: (function() {
                 if (process.platform === 'darwin')
-                return 'Alt+Command+I';
+                    return 'Alt+Command+I'
                 else
-                return 'Ctrl+Shift+I';
+                    return 'Ctrl+Shift+I'
             })(),
             click: function(item, focusedWindow) {
-                if (focusedWindow) focusedWindow.toggleDevTools();
+                if (focusedWindow) focusedWindow.toggleDevTools()
             }
         }
     ]
