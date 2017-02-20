@@ -208,8 +208,8 @@ $document.on('click', '.add-face', function () {
 })
 $document.on('click', '.delete-face', function () {
     const $face = $(this).closest('.face')
-    $face.remove()
     getSelectedSpritesheet().faces.splice($face.index(), 1)
+    $face.remove()
     // $face.remove()
 })
 $document.on('change', '.face-width', function () {
