@@ -120,6 +120,7 @@ button:active {
 .spritesheet-actions {
     /*flex: 0 1 50%;*/
     display: flex;
+    justify-content: space-between;
     /*margin-bottom: 5px;*/
     background: #F1F1F1;
     padding: 5px;
@@ -149,7 +150,7 @@ button:active {
     padding: 0 5px;
 }
 .spritesheet-actions .right {
-    position: absolute;
+    /*position: absolute;*/
     right: 17px;
     padding: 0 5px;
     display: flex;
