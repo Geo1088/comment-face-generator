@@ -212,6 +212,16 @@ $document.on('click', '.delete-face', function () {
     $face.remove()
     // $face.remove()
 })
+$document.on('change', '.face-name', function () {
+    const $this = $(this)
+    const $face = $this.closest('.face')
+    const index = $face.index()
+    const face = getSelectedSpritesheet().faces[index]
+    const val = $this.val()
+
+    // Update face name with value, no checks or anything
+    face.name = val
+})
 $document.on('change', '.face-width', function () {
     const $this = $(this)
     const $face = $this.closest('.face')

@@ -108,7 +108,7 @@ class Face {
                 <div class="face">
                     ${faceHTML}
                     <div class="face-actions">
-                        <code>${this.name}</code>
+                        <input class="face-name hover-only" type="text" value="${this.name}">
                         <br>
                         <input class="face-width" type="number" placeholder="${this.spritesheet.defaultWidth}" value="${this.width}">
                         x
