@@ -18,7 +18,7 @@ class Face {
         // the preview is updated. The value is set back to false after the
         // recalculation. This is set to true by default so these calculations
         // run the first time, but it really shouldn't be used elsewhere.
-        this.useNativeRes = true
+        this.useNativeRes = this.width == null || this.height == null
     }
 
     get bgX () {
