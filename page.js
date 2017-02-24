@@ -7,11 +7,13 @@ const jimp = require('jimp')
 window.$ = window.jQuery = require('jquery')
 // Classes
 const Project = require('./Project.js')
-
-
-// Initialization
-let project = new Project() // The current project - one per window
+// Runtime constants
+const browserWindow = getCurrentWindow()
 const $document = $(document)
+
+
+// Data initialization
+let project = new Project() // The current project - one per window
 let currentImageData
 
 
@@ -83,7 +85,7 @@ function refreshDisplay () {
 // Add faces from a list of images the user selects
 function addFaces () {
     // Get an image path from the user, and load it
-    let filepaths = dialog.showOpenDialog(getCurrentWindow(), {
+    let filepaths = dialog.showOpenDialog(browserWindow, {
         title: 'Import face',
         properties: [
             'openFile',
@@ -156,7 +158,7 @@ $(window).on('load', function () {
 $document.on('click', '.delete-spritesheet', deleteSpritesheet)
 $document.on('click', '.save-spritesheet', function () {
     if (!currentImageData) return
-    const path = dialog.showSaveDialog(getCurrentWindow(), {
+    const path = dialog.showSaveDialog(browserWindow, {
         title: 'Save spritesheet',
         defaultPath: `${getSelectedSpritesheet().name}.png`,
         filters: [
@@ -381,7 +383,7 @@ document.querySelectorAll('.dismisses-popover').forEach(button => {
 
 // Saving and loading
 function setWritePath () {
-    const filepath = dialog.showSaveDialog(getCurrentWindow(), {
+    const filepath = dialog.showSaveDialog(browserWindow, {
         title: 'Save spritesheet',
         defaultPath: 'MyProject.spset',
         filters: [
@@ -429,7 +431,7 @@ function alertIfNotSaved () {
 
 function open () {
     if (alertIfNotSaved()) return
-    let filepath = dialog.showOpenDialog(getCurrentWindow(), {
+    let filepath = dialog.showOpenDialog(browserWindow, {
         title: 'Import a project',
         properties: [
             'openFile'
@@ -535,7 +537,7 @@ menu[3] = {
         }
     ]
 }// The original "View" menu
-getCurrentWindow().setMenu(Menu.buildFromTemplate(menu))
+browserWindow.setMenu(Menu.buildFromTemplate(menu))
 
 // Random style thing
 // TODO: No inline styles this is shit
@@ -552,11 +554,11 @@ function tryCloseWindow () {
     if (alertIfNotSaved()) return
     // Otherwise destroy the window, which skips this listener (but still
     // triggers onbeforeunload, etc.)
-    getCurrentWindow().destroy()
+    browserWindow.destroy()
 }
-getCurrentWindow().on('close', tryCloseWindow)
+browserWindow.on('close', tryCloseWindow)
 // Clean up after ourselves - because parts of the window are dereferenced on
 // reload, having leftover listeners creates exceptions
 window.addEventListener('beforeunload', function removeCloseListenerBeforeUnload () {
-    getCurrentWindow().removeListener('close', tryCloseWindow)
+    browserWindow.removeListener('close', tryCloseWindow)
 })
