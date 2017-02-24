@@ -58,6 +58,7 @@ function createSpritesheet (data) {
     const newSheet = project.createSpritesheet(data)
     $('.spritesheets-list').append($(newSheet.listItem))
     selectSpritesheet(newSheet)
+    project.unsaved = true
 }
 function deleteSpritesheet (data = getSelectedSpritesheetIndex()) {
     let index = (typeof data === 'number' ? data : project.spritesheets.indexOf(data))
@@ -65,6 +66,7 @@ function deleteSpritesheet (data = getSelectedSpritesheetIndex()) {
     $('.spritesheet').eq(index).remove()
     if (index > 0) index--
     selectSpritesheet(index)
+    project.unsaved = true
 }
 // Completely refresh the display, reconstructing the spritesheet and face lists
 function refreshDisplay () {
@@ -117,6 +119,7 @@ function addFaces () {
             handlePath(index + 1)
         })
     }(0)
+    project.unsaved = true
 }
 
 // Events - tab menu and tab updates
@@ -147,6 +150,7 @@ $document.on('click', '.create-spritesheet', newSpritesheet)
 // TODO: This should be handled by the Project initializer
 $(window).on('load', function () {
     createSpritesheet()
+    project.unsaved = false
 })
 
 $document.on('click', '.delete-spritesheet', deleteSpritesheet)
@@ -174,6 +178,7 @@ $document.on('change', '.spritesheet-title', function () {
     const spritesheet = getSelectedSpritesheet()
     spritesheet.name = $(this).val()
     $('.spritesheet.active').html(spritesheet.name)
+    project.unsaved = true
 })
 function updateAllFacePreviews () {
     const spritesheet = getSelectedSpritesheet()
@@ -198,6 +203,7 @@ $document.on('click', '.set-all-face-dimensions', function () {
         $('.faces-container').eq(index).find('.face-height').val(height)
     })
     updateAllFacePreviews()
+    project.unsaved = true
 })
 
 // Events - face controls
@@ -207,6 +213,7 @@ $document.on('click', '.delete-face', function () {
     getSelectedSpritesheet().faces.splice($face.index(), 1)
     $face.remove()
     // $face.remove()
+    project.unsaved = true
 })
 $document.on('change', '.face-name', function () {
     const $this = $(this)
@@ -217,6 +224,7 @@ $document.on('change', '.face-name', function () {
 
     // Update face name with value, no checks or anything
     face.name = val
+    project.unsaved = true
 })
 $document.on('change', '.face-width', function () {
     const $this = $(this)
@@ -237,6 +245,7 @@ $document.on('change', '.face-width', function () {
         $face.children('.face-preview-wrap').remove()
         $face.prepend($(html))
     })
+    project.unsaved = true
 })
 $document.on('change', '.face-height', function () {
     const $this = $(this)
@@ -256,6 +265,7 @@ $document.on('change', '.face-height', function () {
         $face.children('.face-preview-wrap').remove()
         $face.prepend($(html))
     })
+    project.unsaved = true
 })
 // Resizing
 $document.on('click', '.set-face-initial-dimensions', function () {
@@ -273,6 +283,7 @@ $document.on('click', '.set-face-initial-dimensions', function () {
         $face.find('.face-width').val(face.width)
         $face.find('.face-height').val(face.height)
     })
+    project.unsaved = true
 })
 $document.on('click', '.scale-face-to-width', function () {
     const $this = $(this)
@@ -301,6 +312,7 @@ $document.on('click', '.scale-face-to-width', function () {
 
     // Reset the value input
     $input.val('')
+    project.unsaved = true
 })
 $document.on('click', '.scale-face-to-height', function () {
     const $this = $(this)
@@ -329,11 +341,13 @@ $document.on('click', '.scale-face-to-height', function () {
 
     // Reset the value input
     $input.val('')
+    project.unsaved = true
 })
 
 // Events - settings
 $document.on('change', '.use-slashes-setting', function () {
     project.settings.useSlashes = $(this).is(':checked')
+    project.unsaved = true
 })
 
 // Test
@@ -380,6 +394,7 @@ function setWritePath () {
 function writeProject () {
     const fileContents = JSON.stringify(project.object)
     fs.writeFileSync(project.writePath, fileContents, 'utf-8')
+    project.unsaved = false
 }
 function save () {
     if (!project.writePath) setWritePath()
@@ -390,15 +405,26 @@ function saveAs () {
     writeProject()
 }
 function alertIfNotSaved () {
-    // TODO
-    // if project needs to be saved:
-    //     present dialog "do you want to save?" y/n/c
-    //     if c: return true
-    //     if y: save
-    //     if n: pass
-    //     return false
-    // else: return false
-    return false
+    if (!project.unsaved) return // Only do things if we haven't saved
+    const result = dialog.showMessageBox({
+        type: 'warning',
+        title: 'Unsaved changes',
+        message: 'The current project has unsaved changes. What do you want to do?',
+        buttons: [
+            'Save',
+            "Don't Save",
+            'Cancel'
+        ]
+    })
+    switch (result) {
+        case 0: // "Save" - Save changes, then continue
+            save()
+            return false
+        case 1: // "Don't save" - Ignore changes, continue
+            return false
+        case 2: // "Cancel" - Stop whatever we were doing
+            return true
+    }
 }
 
 function open () {
@@ -418,6 +444,7 @@ function open () {
     project = new Project(JSON.parse(data))
     project.writePath = filepath
     refreshDisplay()
+    project.unsaved = false
 }
 
 function newProject () {
