@@ -1,5 +1,5 @@
 // Packages
-const {dialog, BrowserWindow, Menu, app, shell} = require('electron').remote
+const {dialog, getCurrentWindow, Menu, app, shell, getCurrentWindow} = require('electron').remote
 const defaultMenu = require('electron-default-menu')
 const path = require('path')
 const fs = require('fs')
@@ -81,7 +81,7 @@ function refreshDisplay () {
 // Add faces from a list of images the user selects
 function addFaces () {
     // Get an image path from the user, and load it
-    let filepaths = dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
+    let filepaths = dialog.showOpenDialog(getCurrentWindow(), {
         title: 'Import face',
         properties: [
             'openFile',
@@ -152,7 +152,7 @@ $(window).on('load', function () {
 $document.on('click', '.delete-spritesheet', deleteSpritesheet)
 $document.on('click', '.save-spritesheet', function () {
     if (!currentImageData) return
-    const path = dialog.showSaveDialog(BrowserWindow.getFocusedWindow(), {
+    const path = dialog.showSaveDialog(getCurrentWindow(), {
         title: 'Save spritesheet',
         defaultPath: `${getSelectedSpritesheet().name}.png`,
         filters: [
@@ -367,7 +367,7 @@ document.querySelectorAll('.dismisses-popover').forEach(button => {
 
 // Saving and loading
 function setWritePath () {
-    const filepath = dialog.showSaveDialog(BrowserWindow.getFocusedWindow(), {
+    const filepath = dialog.showSaveDialog(getCurrentWindow(), {
         title: 'Save spritesheet',
         defaultPath: 'MyProject.spset',
         filters: [
@@ -403,7 +403,7 @@ function alertIfNotSaved () {
 
 function open () {
     if (alertIfNotSaved()) return
-    let filepath = dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
+    let filepath = dialog.showOpenDialog(getCurrentWindow(), {
         title: 'Import a project',
         properties: [
             'openFile'
@@ -508,7 +508,7 @@ menu[3] = {
         }
     ]
 }// The original "View" menu
-BrowserWindow.getFocusedWindow().setMenu(Menu.buildFromTemplate(menu))
+getCurrentWindow().setMenu(Menu.buildFromTemplate(menu))
 
 // Random style thing
 // TODO: No inline styles this is shit
