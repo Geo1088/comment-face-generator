@@ -21,7 +21,7 @@ class Project {
             }
         }
 
-        this.savePath = ''
+        this.writePath = ''
     }
 
     createSpritesheet (spritesheet) {

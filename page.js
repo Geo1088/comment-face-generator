@@ -375,11 +375,11 @@ function setWritePath () {
         ]
     })
     if (!filepath) return
-    project.savePath = filepath
+    project.writePath = filepath
 }
 function writeProject () {
     const fileContents = JSON.stringify(project.object)
-    fs.writeFileSync(project.savePath, fileContents, 'utf-8')
+    fs.writeFileSync(project.writePath, fileContents, 'utf-8')
 }
 function save () {
     if (!project.writePath) setWritePath()
@@ -416,7 +416,7 @@ function open () {
     filepath = filepath[0]
     const data = fs.readFileSync(filepath, 'utf-8')
     project = new Project(JSON.parse(data))
-    project.savePath = filepath
+    project.writePath = filepath
     refreshDisplay()
 }
 
