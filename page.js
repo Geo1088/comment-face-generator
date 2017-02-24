@@ -1,5 +1,5 @@
 // Packages
-const {dialog, getCurrentWindow, Menu, app, shell, getCurrentWindow} = require('electron').remote
+const {dialog, getCurrentWindow, Menu, app, shell} = require('electron').remote
 const defaultMenu = require('electron-default-menu')
 const path = require('path')
 const fs = require('fs')
