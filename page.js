@@ -557,6 +557,6 @@ function tryCloseWindow () {
 getCurrentWindow().on('close', tryCloseWindow)
 // Clean up after ourselves - because parts of the window are dereferenced on
 // reload, having leftover listeners creates exceptions
-window.on('beforeunload', function removeCloseListenerBeforeUnload () {
+window.addEventListener('beforeunload', function removeCloseListenerBeforeUnload () {
     getCurrentWindow().removeListener('close', tryCloseWindow)
 })
