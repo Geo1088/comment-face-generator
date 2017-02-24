@@ -20,6 +20,12 @@ function createWindow () {
         slashes: true
     }))
 
+    // Emitted when the window wants to close. We override the close function
+    // from the renderer process, so we cancel the event beforehand from here.
+    win.on('close', function cancelClose (e) {
+        e.preventDefault()
+    })
+
     // Emitted when the window is closed.
     win.on('closed', () => {
         // Dereference the window object, usually you would store windows

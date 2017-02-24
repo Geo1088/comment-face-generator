@@ -544,3 +544,19 @@ $document.ready(function () {
         $('body').css('border-top', '1px solid #BBB')
     }
 })
+
+// Custom event handler for closing the window. The default close behavior is
+// disabled from the main process.
+function tryCloseWindow () {
+    // Cancel the close if the user hits "cancel"
+    if (alertIfNotSaved()) return
+    // Otherwise destroy the window, which skips this listener (but still
+    // triggers onbeforeunload, etc.)
+    getCurrentWindow().destroy()
+}
+getCurrentWindow().on('close', tryCloseWindow)
+// Clean up after ourselves - because parts of the window are dereferenced on
+// reload, having leftover listeners creates exceptions
+window.on('beforeunload', function removeCloseListenerBeforeUnload () {
+    getCurrentWindow().removeListener('close', tryCloseWindow)
+})
