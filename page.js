@@ -1,3 +1,5 @@
+'use strict'
+
 // Packages
 const {dialog, getCurrentWindow, Menu, app, shell} = require('electron').remote
 const defaultMenu = require('electron-default-menu')
@@ -6,7 +8,7 @@ const fs = require('fs')
 const jimp = require('jimp')
 window.$ = window.jQuery = require('jquery')
 // Classes
-const Project = require('./Project.js')
+const Project = require('./Project')
 // Runtime constants
 const browserWindow = getCurrentWindow()
 const $document = $(document)

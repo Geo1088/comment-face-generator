@@ -1,5 +1,5 @@
 const jimp = require('jimp')
-const Image = require('./Image.js')
+const Image = require('./Image')
 
 class Face {
     constructor (data) {

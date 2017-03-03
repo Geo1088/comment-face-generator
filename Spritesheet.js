@@ -1,5 +1,5 @@
 const jimp = require('jimp')
-const Face = require('./Face.js')
+const Face = require('./Face')
 
 // im bad - http://stackoverflow.com/a/1053865
 function mode(array) {

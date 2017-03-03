@@ -1,4 +1,6 @@
-const Spritesheet = require('./Spritesheet.js')
+'use strict'
+
+const Spritesheet = require('./Spritesheet')
 
 class Project {
     constructor (options) {
