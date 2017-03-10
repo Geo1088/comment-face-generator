@@ -46,6 +46,7 @@ function selectSpritesheet (data) {
     const face = spritesheet.faces[index]
     if (face == null) return
     face.getFullHTML((err, html) => {
+      if (err) throw new Error(err)
       $('.faces-container').append($(html))
       addFaceToList(index + 1)
     })
@@ -190,6 +191,7 @@ function updateAllFacePreviews () {
     const $this = $(this)
     if ($this.find('.face-width[value=""]')) {
       spritesheet.faces[index].getPreviewHTML((err, html) => {
+        if (err) throw new Error(err)
         $this.children('.face-preview-wrap').remove()
         $this.prepend($(html))
       })
@@ -246,6 +248,7 @@ $document.on('change', '.face-width', function () {
 
   // Update the display image with the new dimensions
   face.getPreviewHTML((err, html) => {
+    if (err) throw new Error(err)
     $face.children('.face-preview-wrap').remove()
     $face.prepend($(html))
   })
@@ -266,6 +269,7 @@ $document.on('change', '.face-height', function () {
 
   // Update the display image with the new dimensions
   face.getPreviewHTML((err, html) => {
+    if (err) throw new Error(err)
     $face.children('.face-preview-wrap').remove()
     $face.prepend($(html))
   })
@@ -279,6 +283,7 @@ $document.on('click', '.set-face-initial-dimensions', function () {
   // Regenerate face preview with initial resolution
   face.useNativeRes = true
   face.getPreviewHTML((err, html) => {
+    if (err) throw new Error(err)
     $face.children('.face-preview-wrap').remove()
     $face.prepend($(html))
 
@@ -305,6 +310,7 @@ $document.on('click', '.scale-face-to-width', function () {
 
   // Update the display image with the new dimensions
   face.getPreviewHTML((err, html) => {
+    if (err) throw new Error(err)
     $face.children('.face-preview-wrap').remove()
     $face.prepend($(html))
   })
@@ -333,6 +339,7 @@ $document.on('click', '.scale-face-to-height', function () {
 
   // Update the display image with the new dimensions
   face.getPreviewHTML((err, html) => {
+    if (err) throw new Error(err)
     $face.children('.face-preview-wrap').remove()
     $face.prepend($(html))
   })
