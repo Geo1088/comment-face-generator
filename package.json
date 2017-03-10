@@ -8,5 +8,8 @@
   "devDependencies": {
     "electron": "^1.4.15",
     "standard": "^9.0.1"
+  },
+  "scripts": {
+    "test": "standard"
   }
 }
