@@ -93,15 +93,12 @@ ${this.faces.map(f => f.selector).join(',')}{
 
     // Now that we know the dimensions, we can create a new image and add
     // each face image to it.
-    Jimp(fullWidth, fullHeight, (err, spritesheetImage) => {
+    new Jimp(fullWidth, fullHeight, (err, spritesheetImage) => {
       if (err) callback(err)
 
       // Recursive function to construct the spritesheet from each face
-      let index = 0
-      let traversedHeight = 0
-      let faces = this.faces
-
-      function placeFace () {
+      const faces = this.faces // using `this` inside the recursive function is hard
+      ;(function placeFace (index = 0, traversedHeight = 0) {
         // If we're done, call back with the full image
         if (index >= faces.length) return callback(null, spritesheetImage)
         // Get the image data
@@ -111,11 +108,9 @@ ${this.faces.map(f => f.selector).join(',')}{
           // Blit the image
           spritesheetImage.blit(faceImage, 0, traversedHeight)
           // Bump vars and move to next image
-          traversedHeight += faceImage.bitmap.height
-          placeFace(index++)
+          placeFace(index + 1, traversedHeight + faceImage.bitmap.height)
         })
-      }
-      placeFace(index)
+      })()
     })
   }
 
