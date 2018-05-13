@@ -538,7 +538,7 @@ menu[3] = {
       }
     }
   ]
-}// The original "View" menu
+} // The original "View" menu
 browserWindow.setMenu(Menu.buildFromTemplate(menu))
 
 // Random style thing

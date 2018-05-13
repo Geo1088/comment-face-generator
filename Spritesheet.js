@@ -93,7 +93,7 @@ ${this.faces.map(f => f.selector).join(',')}{
 
     // Now that we know the dimensions, we can create a new image and add
     // each face image to it.
-    new Jimp(fullWidth, fullHeight, (err, spritesheetImage) => {
+    new Jimp(fullWidth, fullHeight, (err, spritesheetImage) => { // eslint-disable-line no-new
       if (err) callback(err)
 
       // Recursive function to construct the spritesheet from each face
